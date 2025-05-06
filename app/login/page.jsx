@@ -3,48 +3,37 @@ import { useState } from "react";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { encode } from "js-base64";
-
-const url = process.env.NEXT_PUBLIC_API_URL;
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [account, setAccount] = useState("davidwang12");
   const [password, setPassword] = useState("admin");
   const isValid = account !== "" && password !== "";
 
   const handleSubmit = async (e) => {
-    console.log(url);
     e.preventDefault();
     const data = {
       Account: account,
-      Password: encode(password),
+      Password: password,
     };
     try {
-      const response = await fetch(`${url}/api/Auth/login`, {
+      const response = await fetch(`/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const result = await response.json();
-        console.log(result);
-        if (result.ResultCode === 0) {
-          Swal.fire({
-            icon: "success",
-            title: "登入成功",
-            text: result.Message,
-          });
-        } else {
-          throw new Error(result.Message || "請重新登入");
-        }
-      } else {
-        throw new Error("請檢查伺服器狀態");
+      const result = await response.json();
+      if (result.ok) {
+        Swal.fire({
+          icon: "success",
+          title: "登入成功",
+          
+        });
       }
     } catch (error) {
-      console.log(error);
       Swal.fire({
         icon: "error",
         title: "登入失敗",
