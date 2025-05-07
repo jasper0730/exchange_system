@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import Link from "next/link";
 
+const otpSeconds = 300;
 export default function ForgotPassword() {
   const [step, setStep] = useState(1);
   const [account, setAccount] = useState("");
@@ -15,14 +16,17 @@ export default function ForgotPassword() {
   // 控制重新發送驗證碼倒數
   const handleResendOtp = () => {
     setOtpSent(true);
-    setOtpResendTimer(300);
+    setOtpResendTimer(otpSeconds);
     Swal.fire({ icon: "success", title: "驗證碼已重新發送" });
   };
 
   // 倒數計時
   useEffect(() => {
     if (otpResendTimer > 0) {
-      const timer = setTimeout(() => setOtpResendTimer(otpResendTimer - 1), 1000);
+      const timer = setTimeout(
+        () => setOtpResendTimer(otpResendTimer - 1),
+        1000
+      );
       return () => clearTimeout(timer);
     }
   }, [otpResendTimer]);
@@ -33,13 +37,13 @@ export default function ForgotPassword() {
     setOtp(val);
   };
 
-  // 下一步：發送OTP
+  // 發送OTP
   const handleNext = (e) => {
     e.preventDefault();
     // TODO: 串接後端發送OTP
     setOtpSent(true);
     setStep(2);
-    setOtpResendTimer(60);
+    setOtpResendTimer(otpSeconds);
     Swal.fire({ icon: "success", title: "驗證碼已發送" });
   };
 
@@ -51,7 +55,11 @@ export default function ForgotPassword() {
       return;
     }
     // TODO: 串接後端驗證OTP與重設密碼
-    Swal.fire({ icon: "success", title: "密碼重設成功", text: "請用新密碼登入。" });
+    Swal.fire({
+      icon: "success",
+      title: "密碼重設成功",
+      text: "請用新密碼登入。",
+    });
   };
 
   return (
@@ -61,7 +69,9 @@ export default function ForgotPassword() {
         {step === 1 && (
           <>
             <div className="mb-6">
-              <label className="block text-gray-700 mb-2" htmlFor="account">帳號</label>
+              <label className="block text-gray-700 mb-2" htmlFor="account">
+                帳號
+              </label>
               <input
                 id="account"
                 type="text"
@@ -74,7 +84,9 @@ export default function ForgotPassword() {
             </div>
             <button
               type="button"
-              className={`w-full font-semibold py-2 px-4 rounded transition text-white ${account ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300"}`}
+              className={`w-full font-semibold py-2 px-4 rounded transition text-white ${
+                account ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300"
+              }`}
               disabled={!account}
               onClick={handleNext}
             >
@@ -85,7 +97,9 @@ export default function ForgotPassword() {
         {step === 2 && (
           <>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="otp">驗證碼</label>
+              <label className="block text-gray-700 mb-2" htmlFor="otp">
+                驗證碼
+              </label>
               <input
                 id="otp"
                 type="number"
@@ -105,12 +119,16 @@ export default function ForgotPassword() {
                   onClick={handleResendOtp}
                   disabled={otpResendTimer > 0}
                 >
-                  {otpResendTimer > 0 ? `重新發送 (${otpResendTimer}s)` : "重新發送驗證碼"}
+                  {otpResendTimer > 0
+                    ? `重新發送 (${otpResendTimer}s)`
+                    : "重新發送驗證碼"}
                 </button>
               </div>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="password">新密碼</label>
+              <label className="block text-gray-700 mb-2" htmlFor="password">
+                新密碼
+              </label>
               <input
                 id="password"
                 type="password"
@@ -122,7 +140,12 @@ export default function ForgotPassword() {
               />
             </div>
             <div className="mb-6">
-              <label className="block text-gray-700 mb-2" htmlFor="confirmPassword">確認新密碼</label>
+              <label
+                className="block text-gray-700 mb-2"
+                htmlFor="confirmPassword"
+              >
+                確認新密碼
+              </label>
               <input
                 id="confirmPassword"
                 type="password"
@@ -135,7 +158,11 @@ export default function ForgotPassword() {
             </div>
             <button
               type="button"
-              className={`w-full font-semibold py-2 px-4 rounded transition text-white ${(otp && password && confirmPassword) ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300"}`}
+              className={`w-full font-semibold py-2 px-4 rounded transition text-white ${
+                otp && password && confirmPassword
+                  ? "bg-blue-500 hover:bg-blue-600"
+                  : "bg-gray-300"
+              }`}
               disabled={!(otp && password && confirmPassword)}
               onClick={handleConfirm}
             >
@@ -144,7 +171,10 @@ export default function ForgotPassword() {
           </>
         )}
         <div className="flex justify-center mt-4">
-          <Link href="/login" className="text-blue-500 hover:opacity-80 text-sm">
+          <Link
+            href="/login"
+            className="text-blue-500 hover:opacity-80 text-sm"
+          >
             回登入頁
           </Link>
         </div>

@@ -28,7 +28,6 @@ export async function POST(request) {
     }
 
     const now = Date.now();
-    // 將 ExpiredTime 轉為標準格式，確保 Date 解析正確
     const expiredStr =
       result.ExpiredTime.replace(/\//g, "-").replace(" ", "T") + "+08:00";
     const expiredDate = new Date(expiredStr);

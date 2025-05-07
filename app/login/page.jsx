@@ -26,18 +26,26 @@ const Login = () => {
       });
 
       const result = await response.json();
+      console.log("result", result);
       if (result.ok) {
         Swal.fire({
           icon: "success",
           title: "登入成功",
-          
+        });
+        router.push("/");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "登入失敗",
+          text: result.message || "請重新登入",
         });
       }
     } catch (error) {
+      console.log("error", error);
       Swal.fire({
         icon: "error",
         title: "登入失敗",
-        text: error.message || "請重新登入",
+        text: "請重新登入",
       });
     }
   };
@@ -89,7 +97,11 @@ const Login = () => {
         <button
           type="submit"
           className={` w-full font-semibold py-2 px-4 rounded transition text-white 
-            ${isValid ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300"}
+            ${
+              isValid
+                ? "bg-blue-500 hover:bg-blue-600 cursor-pointer"
+                : "bg-gray-300"
+            }
           `}
           disabled={!isValid}
         >
