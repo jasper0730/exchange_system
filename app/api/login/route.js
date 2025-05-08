@@ -18,7 +18,6 @@ export async function POST(request) {
     });
 
     const result = await response.json();
-    console.log("111", result);
 
     if (result.ResultCode !== 0 || !result.Token) {
       return NextResponse.json(

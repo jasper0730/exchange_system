@@ -1,5 +1,4 @@
-
-import {FadeLoader} from "react-spinners";
+import { FadeLoader } from "react-spinners";
 
 function Loader({ className, fullScreen = false, page = false }) {
   const fullScreenClass = "fixed inset-0 bg-white bg-opacity-30 z-10";

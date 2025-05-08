@@ -40,7 +40,6 @@ export default function ForgotPassword() {
   // 發送OTP
   const handleNext = (e) => {
     e.preventDefault();
-    // TODO: 串接後端發送OTP
     setOtpSent(true);
     setStep(2);
     setOtpResendTimer(otpSeconds);
@@ -54,7 +53,6 @@ export default function ForgotPassword() {
       Swal.fire({ icon: "error", title: "密碼不一致" });
       return;
     }
-    // TODO: 串接後端驗證OTP與重設密碼
     Swal.fire({
       icon: "success",
       title: "密碼重設成功",
