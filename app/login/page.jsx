@@ -26,7 +26,6 @@ const Login = () => {
       });
 
       const result = await response.json();
-      console.log("result", result);
       if (result.ok) {
         Swal.fire({
           icon: "success",
@@ -34,18 +33,13 @@ const Login = () => {
         });
         router.push("/");
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "登入失敗",
-          text: result.message || "請重新登入",
-        });
+        throw new Error(result.message);
       }
     } catch (error) {
-      console.log("error", error);
       Swal.fire({
         icon: "error",
         title: "登入失敗",
-        text: "請重新登入",
+        text: error.message || "q",
       });
     }
   };

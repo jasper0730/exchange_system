@@ -4,17 +4,18 @@ import { usePathname } from "next/navigation";
 import SideMenu from "@/components/layout/SideMenu";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
+import { Loader } from "@/components/ui";
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+
   function handleMenuClick() {
     setMenuOpen((prev) => !prev);
   }
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
-
   return (
     <>
       <div className="hidden xl:block">
