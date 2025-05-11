@@ -2,20 +2,19 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { FiLogOut } from "react-icons/fi";
-import { usePermission } from "@/hooks";
 import { Loader } from "@/components/ui";
 import { menuItems } from "@/lib/menuItems";
 
 export default function SideMenu() {
   const pathname = usePathname();
-  const { routes, isLoading } = usePermission(pathname);
-  const filteredMenuItems = menuItems.filter(item => routes.includes(item.href));
+  // const filteredMenuItems = menuItems.filter(item => routes.includes(item.href));
+  const filteredMenuItems = menuItems
 
   function handleLogout() {
     console.log("登出");
   }
 
-  if (isLoading) return <Loader fullScreen />;
+  // if (isLoading) return <Loader fullScreen />;
   return (
     <aside className="fixed top-0 left-0 h-dvh w-[300px] bg-gray-900 text-white flex flex-col py-10 shadow-lg overflow-y-auto overflow-x-hidden justify-between">
       <div className="flex flex-col px-3 mb-10">

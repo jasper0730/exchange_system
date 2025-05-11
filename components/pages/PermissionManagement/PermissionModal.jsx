@@ -1,16 +1,27 @@
+import { useEffect, useState } from "react";
 import { Modal } from "@/components/common";
 import { menuItems } from "@/lib/menuItems";
-import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 
-export default function PermissionModal({ data, isOpen, onClose }) {
+export default function PermissionModal({ data, isOpen, onClose, onSubmit, mode }) {
   const [groupName, setGroupName] = useState("");
-  const [permissions, setPermissions] = useState(() =>
-    menuItems.reduce((acc, item) => {
-      acc[item.href] = "disabled";
-      return acc;
-    }, {})
-  );
+  const [permissions, setPermissions] = useState({});
+
+
+  useEffect(() => {
+    if (mode === "edit" && data) {
+      setGroupName(data.name);
+      setPermissions(data.permissions);
+    } else {
+      setGroupName("");
+      setPermissions(
+        menuItems.reduce((acc, item) => {
+          acc[item.href] = "disabled";
+          return acc;
+        }, {})
+      );
+    }
+  }, [mode, data, isOpen]);
   const isValid = groupName.trim() === "";
 
   const handlePermissionChange = (feature, value) => {
@@ -20,6 +31,7 @@ export default function PermissionModal({ data, isOpen, onClose }) {
   const handleSave = () => {
     if (isValid) return;
     console.log("儲存資料：", { groupName, permissions });
+    onSubmit({ groupName, permissions });
     // setGroupName("");
     // onClose();
   };
@@ -28,8 +40,9 @@ export default function PermissionModal({ data, isOpen, onClose }) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-
-      <div className="p-10 max-w-[700px] w-full rounded-lg shadow-lg bg-white relative">
+      <div
+        className="p-10 max-w-[700px] w-full rounded-lg shadow-lg bg-white relative"
+        onClick={(e) => e.stopPropagation()}>
         <button
           type="button"
           onClick={onClose}
@@ -37,7 +50,7 @@ export default function PermissionModal({ data, isOpen, onClose }) {
         >
           <AiOutlineClose size={24} />
         </button>
-        <h2 className="text-2xl font-bold mb-10 text-gray-900">新增群組</h2>
+        <h2 className="text-2xl font-bold mb-10 text-gray-900">{mode === "create" ? "新增" : "編輯"}群組</h2>
         <div className="px-5">
           <div className="flex items-center gap-4 mb-5">
             <p className="whitespace-nowrap text-lg font-bold">群組名稱</p>

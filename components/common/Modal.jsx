@@ -30,7 +30,6 @@ const Modal = ({ className, isOpen, onClose, children }) => {
         >
           <motion.div
             className={`w-full relative h-full flex flex-col justify-center items-center${className ? className : ''}`}
-            onClick={(e) => e.stopPropagation()}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

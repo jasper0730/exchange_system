@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server';
 
 export function middleware(request) {
   const token = request.cookies.get('token')?.value;
+  const pathname = request.nextUrl.pathname;
 
-  const isPublicPath = ['/login', '/forgot-password'].includes(request.nextUrl.pathname);
+  const publicPaths = ["/login", "/forget-password"];
+
+  const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
 
   if (!token && !isPublicPath) {
     const url = request.nextUrl.clone();
