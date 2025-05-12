@@ -144,7 +144,6 @@ export default function AdminManagement() {
 	if (isLoading) return <Loader fullScreen />;
 	return (
 		<>
-
 			<PageLayout>
 				<PageTitle title="後台使用者管理" />
 				<div className="mt-5">
