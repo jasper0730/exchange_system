@@ -18,8 +18,8 @@ export default function AdminManagement() {
 	const [editAdmin, setEditAdmin] = useState(null);
 	const { routes } = useAuthStore();
 	const segments = pathname.split("/").filter(Boolean);
-      const pageKey = segments[0];
-      const current = routes?.[pageKey];
+	const pageKey = segments[0];
+	const current = routes?.[pageKey];
 	const readMode = current === "readonly";
 	const enableMode = current === "enable";
 
