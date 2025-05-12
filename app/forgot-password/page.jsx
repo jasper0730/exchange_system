@@ -73,7 +73,7 @@ export default function ForgotPassword() {
               <input
                 id="account"
                 type="text"
-                value={account}
+                value={account ?? ""}
                 onChange={(e) => setAccount(e.target.value)}
                 required
                 className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -103,7 +103,7 @@ export default function ForgotPassword() {
                 type="number"
                 inputMode="numeric"
                 pattern="[0-9]*"
-                value={otp}
+                value={otp ?? ""}
                 onChange={handleOtpChange}
                 required
                 maxLength={6}
@@ -130,7 +130,7 @@ export default function ForgotPassword() {
               <input
                 id="password"
                 type="password"
-                value={password}
+                value={password ?? ""}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -147,7 +147,7 @@ export default function ForgotPassword() {
               <input
                 id="confirmPassword"
                 type="password"
-                value={confirmPassword}
+                value={confirmPassword ?? ""}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"

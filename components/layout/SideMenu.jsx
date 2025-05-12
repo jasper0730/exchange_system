@@ -39,7 +39,7 @@ export default function SideMenu() {
         Swal.fire({
           icon: "success",
           title: "登出成功",
-          timer: 1500,
+          timer: 1000,
           showConfirmButton: false,
         }).then(() => {
           router.replace("/login");

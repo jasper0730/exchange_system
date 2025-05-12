@@ -58,7 +58,7 @@ export default function PermissionModal({ data, isOpen, onClose, onSubmit, mode 
               type="text"
               className="border p-2 w-full rounded"
               placeholder="請輸入群組名稱"
-              value={groupName}
+              value={groupName ?? ""}
               onChange={(e) => setGroupName(e.target.value)}
             />
           </div>

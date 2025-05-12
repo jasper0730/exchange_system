@@ -53,7 +53,7 @@ export default function adminModal({ data, isOpen, onClose, onSubmit, mode }) {
               type="text"
               className="border p-2 w-full rounded"
               placeholder="請輸入帳號"
-              value={admin.Account}
+              value={admin.Account ?? ""}
               onChange={(e) => setAdmin({ ...admin, Account: e.target.value })}
             />
           </div>
@@ -63,7 +63,7 @@ export default function adminModal({ data, isOpen, onClose, onSubmit, mode }) {
               type="email"
               className="border p-2 w-full rounded"
               placeholder="請輸入 Email"
-              value={admin.Email}
+              value={admin.Email ?? ""}
               onChange={(e) => setAdmin({ ...admin, Email: e.target.value })}
             />
           </div>
