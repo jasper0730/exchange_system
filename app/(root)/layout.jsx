@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import SideMenu from "@/components/layout/SideMenu";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
-import { Loader } from "@/components/ui";
+import AuthGuard from "@/components/auth/AuthGuard";
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
     setMenuOpen(false);
   }, [pathname]);
   return (
-    <>
+    <AuthGuard>
       <div className="hidden xl:block">
         <SideMenu />
       </div>
@@ -47,6 +47,6 @@ export default function RootLayout({ children }) {
         )}
       </AnimatePresence>
       <div className="xl:ml-[300px] mt-16 xl:mt-0">{children}</div>
-    </>
+    </AuthGuard>
   );
 }

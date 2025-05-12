@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { encode } from "js-base64";
-import { loginFromDB } from "@/lib/loginRes";
 
 const url = process.env.NEXT_PUBLIC_API_URL;
 
@@ -17,10 +16,10 @@ export async function POST(request) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    const loginResult = await loginResponse.json();
-    // const result = await loginFromDB();
 
-    if (loginResult.ResultCode !== 0 || !loginResult.Token) {
+    const loginResult = await loginResponse.json();
+
+    if (!loginResponse.ok || loginResult.ResultCode !== 0 || !loginResult.Token) {
       return NextResponse.json(
         { message: loginResult.Message || "請重新登入" },
         { status: 401 }
@@ -40,9 +39,8 @@ export async function POST(request) {
     );
 
     const response = NextResponse.json({
-      message: "success",
+      message: "Success",
       ok: true,
-      role: "admin" // 先放假的
     });
 
     response.cookies.set("token", loginResult.Token, {
@@ -55,7 +53,6 @@ export async function POST(request) {
 
     return response;
   } catch (error) {
-    console.error("Error setting token:", error);
-    return NextResponse.json({ message: "請檢查伺服器狀態" }, { status: 500 });
+    return NextResponse.json({ message: "伺服器錯誤" }, { status: 500 });
   }
 }

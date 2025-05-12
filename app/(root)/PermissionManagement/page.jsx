@@ -1,13 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import { FaSearch, FaEdit } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 import { Loader, PageLayout, PageTitle } from "@/components/ui";
 import { PermissionModal } from "@/components/pages/PermissionManagement";
 import Swal from "sweetalert2";
 
 export default function PermissionManagement() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [groups, setGroups] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("create");
@@ -16,15 +15,20 @@ export default function PermissionManagement() {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch("/api/groups");
-      const result = await res.json();
-      if (result.ok) {
+      const response = await fetch("/api/groups");
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(response.message || "API錯誤");
+      }
+
+      if (result.ResultCode === 0) {
         setGroups(result.data);
       } else {
-        throw new Error("沒有資料");
+        throw new Error(result.message || "資料取得失敗");
       }
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -35,23 +39,41 @@ export default function PermissionManagement() {
   }, []);
 
   const handleSubmit = async (payload) => {
-    const apiUrl = modalMode === "create" ? "/api/groups" : `/api/groups/${editGroup.id}`;
-    const method = modalMode === "create" ? "POST" : "PUT";
+    try {
+      setIsLoading(true);
+      const apiUrl = modalMode === "create" ? "/api/groups" : `/api/groups/${editGroup.id}`;
+      const method = modalMode === "create" ? "POST" : "PUT";
 
-    const res = await fetch(apiUrl, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+      const response = await fetch(apiUrl, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    if (res.ok) {
-      await fetchData();
-      closeModal();
-    } else {
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "API錯誤");
+      }
+      if (result.ResultCode === 0) {
+        fetchData();
+        closeModal();
+        Swal.fire({
+          icon: "success",
+          title: `${modalMode === "create" ? "新增" : "編輯"}成功`,
+        });
+      } else {
+        throw new Error(result.Message || "");
+      }
+    } catch (error) {
+      console.error(error.message);
       Swal.fire({
         icon: "error",
         title: `${modalMode === "create" ? "新增" : "編輯"}失敗`,
+        text: error.message || "格式錯誤"
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -77,28 +99,15 @@ export default function PermissionManagement() {
       <PageLayout>
         <PageTitle title="權限管理" />
         <div className="mt-5">
-          <div className="flex items-center">
-            <p className="text-gray-600 whitespace-nowrap mr-4 text-xl font-bold">
-              搜尋群組
-            </p>
-            <div className="flex items-center border rounded w-full max-w-full px-2 bg-white">
-              <input
-                type="text"
-                placeholder="請輸入關鍵字"
-                className="flex-1 px-2 py-2 outline-none bg-transparent"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-              />
-              <FaSearch className="h-5 w-5 text-gray-400 hover:text-gray-900 cursor-pointer ml-2 duration-300" />
-            </div>
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="bg-gray-400 hover:bg-gray-900 text-white font-semibold px-4 py-2 rounded duration-300 cursor-pointer"
+              onClick={openCreateModal}
+            >
+              新增
+            </button>
           </div>
-          <button
-            type="button"
-            className="mt-5 bg-gray-400 hover:bg-gray-900 text-white font-semibold px-4 py-2 rounded duration-300 cursor-pointer"
-            onClick={openCreateModal}
-          >
-            新增群組
-          </button>
           <div className="mt-5">
             <div className="overflow-x-auto w-full">
               <table className="min-w-full bg-white border border-gray-200">

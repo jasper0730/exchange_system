@@ -1,7 +1,16 @@
+"use client";
+import { useState } from "react";
+import { Loader, PageLayout, PageTitle } from "@/components/ui";
+
 export default function AppManagement() {
+    const [isLoading, setIsLoading] = useState(false);
+
+    if (isLoading) return <Loader fullScreen />;
     return (
-        <div>
-            <h1>AppManagement</h1>
-        </div>
+        <>
+            <PageLayout>
+                <PageTitle title="App 會員管理" />
+            </PageLayout>
+        </>
     );
 }

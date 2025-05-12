@@ -1,20 +1,60 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { FiLogOut } from "react-icons/fi";
 import { Loader } from "@/components/ui";
 import { menuItems } from "@/lib/menuItems";
+import { useAuthStore } from "@/store/authStore";
+import Swal from "sweetalert2";
+
 
 export default function SideMenu() {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { routes } = useAuthStore();
   const pathname = usePathname();
-  // const filteredMenuItems = menuItems.filter(item => routes.includes(item.href));
-  const filteredMenuItems = menuItems
+  const filteredMenuItems = menuItems.filter(item => routes[item.href] && routes[item.href] !== "disabled");
 
-  function handleLogout() {
-    console.log("登出");
-  }
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: "確定要登出嗎？",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "登出",
+      cancelButtonText: "取消",
+    });
 
-  // if (isLoading) return <Loader fullScreen />;
+    if (result.isConfirmed) {
+      try {
+        setIsLoading(true);
+        const response = await fetch("/api/logout", { method: "POST" });
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || "登出 API 錯誤");
+        }
+
+        Swal.fire({
+          icon: "success",
+          title: "登出成功",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          router.replace("/login");
+        });
+      } catch (error) {
+        console.log(error)
+        console.error(error || "登出錯誤");
+        router.replace("/login");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  if (isLoading) return <Loader fullScreen />;
   return (
     <aside className="fixed top-0 left-0 h-dvh w-[300px] bg-gray-900 text-white flex flex-col py-10 shadow-lg overflow-y-auto overflow-x-hidden justify-between">
       <div className="flex flex-col px-3 mb-10">

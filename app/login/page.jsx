@@ -4,32 +4,41 @@ import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { Loader } from "@/components/ui";
 
 const Login = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [account, setAccount] = useState("davidwang12");
   const [password, setPassword] = useState("admin");
+  const [isLoading, setIsLoading] = useState(false);
+
+
   const isValid = account !== "" && password !== "";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = {
+    const body = {
       Account: account,
       Password: password,
     };
     try {
+      setIsLoading(true);
       const response = await fetch(`/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(body),
       });
 
       const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.message || "API錯誤");
+      }
+
       if (result.ok) {
         Swal.fire({
           icon: "success",
-          title: "登入成功",
+          title: "登入成功"
         });
         router.push("/");
       } else {
@@ -39,11 +48,14 @@ const Login = () => {
       Swal.fire({
         icon: "error",
         title: "登入失敗",
-        text: error.message || "q",
+        text: error.message || "請重新登入",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  if (isLoading) return <Loader fullScreen />;
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form
@@ -91,10 +103,9 @@ const Login = () => {
         <button
           type="submit"
           className={` w-full font-semibold py-2 px-4 rounded transition text-white 
-            ${
-              isValid
-                ? "bg-blue-500 hover:bg-blue-600 cursor-pointer"
-                : "bg-gray-300"
+            ${isValid
+              ? "bg-blue-500 hover:bg-blue-600 cursor-pointer"
+              : "bg-gray-300"
             }
           `}
           disabled={!isValid}
