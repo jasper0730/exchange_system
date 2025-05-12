@@ -10,9 +10,9 @@ export async function GET(request) {
     return NextResponse.json({
       ResultCode: 0,
       Role: "admin",
-      routes: {
-        AdminManagement: "enable",
-        AppManagement: "disabled",
+      Routes: {
+        AdminManagement: "readonly",
+        AppManagement: "enable",
         ExchangeMonitor: "enable",
         PermissionManagement: "enable",
         RegisterReview: "enable",

@@ -5,14 +5,26 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdToggleOn, MdToggleOff } from "react-icons/md";
 import { AdminModal } from "@/components/pages/AdminManagement";
 import Swal from "sweetalert2";
+import { useAuthStore } from "@/store/authStore";
+import { usePathname } from "next/navigation";
 
 
 export default function AdminManagement() {
+	const pathname = usePathname();
 	const [isLoading, setIsLoading] = useState(true);
 	const [admins, setAdmins] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalMode, setModalMode] = useState("create");
 	const [editAdmin, setEditAdmin] = useState(null);
+	const { routes } = useAuthStore();
+	const segments = pathname.split("/").filter(Boolean);
+      const pageKey = segments[0];
+      const current = routes?.[pageKey];
+	const readMode = current === "readonly";
+	const enableMode = current === "enable";
+
+	console.log("enableMode", enableMode);
+	console.log("readMode", readMode);
 
 	const fetchData = async () => {
 		try {
@@ -129,9 +141,10 @@ export default function AdminManagement() {
 		fetchData();
 	}, []);
 
-	// if (isLoading) return <Loader fullScreen />;
+	if (isLoading) return <Loader fullScreen />;
 	return (
 		<>
+
 			<PageLayout>
 				<PageTitle title="後台使用者管理" />
 				<div className="mt-5">
@@ -146,7 +159,6 @@ export default function AdminManagement() {
 					</div>
 					<div className="mt-5">
 						<div className="overflow-x-auto w-full">
-
 							<table className="min-w-full bg-white border border-gray-200">
 								<thead>
 									<tr className="bg-gray-900 text-white">
@@ -158,57 +170,47 @@ export default function AdminManagement() {
 									</tr>
 								</thead>
 								<tbody>
-									{isLoading ? (
-										<tr>
-											<td colSpan="5">
-												<Loader page />
+									{admins && admins.map((admin, index) => (
+										<tr key={admin.Id} className="text-center">
+											<td className="px-4 py-2">{index + 1}</td>
+											<td className="px-4 py-2">{admin.Account}</td>
+											<td className="px-4 py-2">{admin.Role}</td>
+											<td className="px-4 py-2">
+												<button
+													type="button"
+													title={admin.Status ? "啟用" : "停用"}
+													className="text-gray-500 hover:text-gray-900 p-1 rounded transition-colors cursor-pointer"
+													onClick={() => toggleStatus(admin.Id)}
+												>
+													{admin.Status ? (
+														<MdToggleOn size={30} className="text-green-500" />
+													) : (
+														<MdToggleOff size={30} className="text-gray-400" />
+													)}
+												</button>
+											</td>
+											<td className="px-4 py-2 flex justify-center items-center gap-4">
+												<button
+													type="button"
+													title="編輯"
+													className="text-gray-500 hover:text-gray-900 p-1 rounded transition-colors cursor-pointer"
+													onClick={() => openEditModal(admin)}
+												>
+													<FaEdit size={18} />
+												</button>
+												<button
+													type="button"
+													title="刪除"
+													className="text-gray-500 hover:text-red-600 p-1 rounded transition-colors cursor-pointer"
+													onClick={() => handleDelete(admin.Id)}
+												>
+													<FaTrash size={18} />
+												</button>
 											</td>
 										</tr>
-									) : (
-										admins.map((admin, index) => (
-											<tr key={admin.Id} className="text-center">
-												<td className="px-4 py-2">{index + 1}</td>
-												<td className="px-4 py-2">{admin.Account}</td>
-												<td className="px-4 py-2">{admin.Role}</td>
-												<td className="px-4 py-2">
-													<button
-														type="button"
-														title={admin.Status ? "啟用" : "停用"}
-														className="text-gray-500 hover:text-gray-900 p-1 rounded transition-colors cursor-pointer"
-														onClick={() => toggleStatus(admin.Id)}
-													>
-														{admin.Status ? (
-															<MdToggleOn size={30} className="text-green-500" />
-														) : (
-															<MdToggleOff size={30} className="text-gray-400" />
-														)}
-													</button>
-												</td>
-												<td className="px-4 py-2 flex justify-center items-center gap-4">
-													<button
-														type="button"
-														title="編輯"
-														className="text-gray-500 hover:text-gray-900 p-1 rounded transition-colors cursor-pointer"
-														onClick={() => openEditModal(admin)}
-													>
-														<FaEdit size={18} />
-													</button>
-													<button
-														type="button"
-														title="刪除"
-														className="text-gray-500 hover:text-red-600 p-1 rounded transition-colors cursor-pointer"
-														onClick={() => handleDelete(admin.Id)}
-													>
-														<FaTrash size={18} />
-													</button>
-												</td>
-											</tr>
-										))
-									)}
+									))}
 								</tbody>
 							</table>
-
-
 						</div>
 					</div>
 				</div>

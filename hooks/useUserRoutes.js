@@ -12,14 +12,14 @@ export function useUserRoutes() {
 
   useEffect(() => {
     if (data) {
-      setRoutes(data.routes);
-      setRole(data.role);
+      setRoutes(data.Routes);
+      setRole(data.Role);
     }
   }, [data, setRoutes, setRole]);
 
   return {
-    routes: data?.routes || {},
-    role: data?.role || "",
+    routes: data?.Routes || {},
+    role: data?.Role || "",
     refreshRoutes: mutate,
     isValidating
   };
