@@ -38,7 +38,9 @@ const Login = () => {
       if (result.ok) {
         Swal.fire({
           icon: "success",
-          title: "登入成功"
+          title: "登入成功",
+          timer: 1500,
+          showConfirmButton: false,
         });
         router.push("/");
       } else {

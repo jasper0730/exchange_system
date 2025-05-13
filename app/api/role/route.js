@@ -11,9 +11,10 @@ export async function GET(request) {
       ResultCode: 0,
       Role: "admin",
       Routes: {
-        AdminManagement: "readonly",
+        AdminManagement: "enable",
         AppManagement: "enable",
         ExchangeMonitor: "enable",
+        ExchangeRate: "enable",
         PermissionManagement: "enable",
         RegisterReview: "enable",
         RiskNotes: "enable",

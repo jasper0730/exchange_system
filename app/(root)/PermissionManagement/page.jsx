@@ -4,6 +4,7 @@ import { FaEdit } from "react-icons/fa";
 import { Loader, PageLayout, PageTitle } from "@/components/ui";
 import { PermissionModal } from "@/components/pages/PermissionManagement";
 import Swal from "sweetalert2";
+import { Button } from "@/components/common";
 
 export default function PermissionManagement() {
   const [isLoading, setIsLoading] = useState(true);
@@ -98,15 +99,13 @@ export default function PermissionManagement() {
     <>
       <PageLayout>
         <PageTitle title="權限管理" />
-        <div className="mt-5">
+        <div className="mt-10">
           <div className="flex justify-end">
-            <button
-              type="button"
-              className="bg-gray-400 hover:bg-gray-900 text-white font-semibold px-4 py-2 rounded duration-300 cursor-pointer"
+            <Button
               onClick={openCreateModal}
             >
               新增
-            </button>
+            </Button>
           </div>
           <div className="mt-5">
             <div className="overflow-x-auto w-full">

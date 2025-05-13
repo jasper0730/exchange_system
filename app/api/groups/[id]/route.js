@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 
 export async function PUT(request, { params }) {
   try {
-    // 確認是否有權限編輯
     // 打API
   } catch (error) {
     return NextResponse.json({ message: "伺服器錯誤" }, { status: 500 });

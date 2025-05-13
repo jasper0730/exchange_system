@@ -3,32 +3,14 @@ import { Modal } from "@/components/common";
 import { AiOutlineClose, AiOutlineDown } from "react-icons/ai";
 import { MdToggleOn, MdToggleOff } from "react-icons/md";
 
-const roleOptions = ["Admin", "Migrant", "Auditor"]; // 暫時用(需從DB拿
+export default function AppModal({ data, isOpen, onClose, onSubmit }) {
 
-export default function AdminModal({ data, isOpen, onClose, onSubmit, mode }) {
-  const initAdmin = {
-    Account: "",
-    Email: "",
-    Status: false,
-    Role: roleOptions[0]
-  };
-  const [admin, setAdmin] = useState(initAdmin);
 
-  useEffect(() => {
-    if (mode === "edit" && data) {
-      setAdmin(data);
-    } else {
-      setAdmin(initAdmin);
-    }
-  }, [mode, data, isOpen]);
-
-  const isValid = admin.Account?.trim() === "" || admin.Email?.trim() === "";
 
   const handleSave = () => {
     if (isValid) return;
     console.log("儲存資料：", admin);
     onSubmit(admin);
-    setAdmin(initAdmin);
   };
 
   if (!isOpen) return null;
@@ -45,17 +27,11 @@ export default function AdminModal({ data, isOpen, onClose, onSubmit, mode }) {
         >
           <AiOutlineClose size={24} />
         </button>
-        <h2 className="text-2xl font-bold mb-10 text-gray-900">{mode === "create" ? "新增" : "編輯"}使用者</h2>
+        <h2 className="text-2xl font-bold mb-10 text-gray-900">會員</h2>
         <div className="space-y-5">
           <div>
-            <label className="block text-lg font-bold mb-2">帳號</label>
-            <input
-              type="text"
-              className="border p-2 w-full rounded"
-              placeholder="請輸入帳號"
-              value={admin.Account ?? ""}
-              onChange={(e) => setAdmin({ ...admin, Account: e.target.value })}
-            />
+            <p>姓名 :</p>
+            <p>{data.name}</p>
           </div>
           <div>
             <label className="block text-lg font-bold mb-2">Email</label>

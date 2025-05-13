@@ -25,10 +25,7 @@ export async function GET() {
 // 新增後台使用者
 export async function POST(request) {
   try {
-    // 確認是否有權限編輯
-
     const body = await request.json();
-    console.log(JSON.stringify(body));
     const addResponse = await fetch(`${url}/api/Admin/CreateAdmin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -40,7 +37,7 @@ export async function POST(request) {
 
     if (!addResponse.ok) {
       return NextResponse.json(
-        { message: addResult.message || "後端新增API錯誤" },
+        { message: addResult.message || "API錯誤" },
         { status: addResponse.status }
       );
     }

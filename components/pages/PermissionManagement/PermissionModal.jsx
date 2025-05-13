@@ -30,10 +30,9 @@ export default function PermissionModal({ data, isOpen, onClose, onSubmit, mode 
 
   const handleSave = () => {
     if (isValid) return;
-    console.log("儲存資料：", { groupName, permissions });
     onSubmit({ groupName, permissions });
-    // setGroupName("");
-    // onClose();
+    setGroupName("");
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -76,7 +75,7 @@ export default function PermissionModal({ data, isOpen, onClose, onSubmit, mode 
                 {menuItems.map((item) => (
                   <tr key={item.href} >
                     <td className={`text-left px-4 py-2 text-gray-900`}>{item.label}</td>
-                    {["enable", "readOnly", "disabled"].map((permissionItem) => (
+                    {["enable", "readonly", "disabled"].map((permissionItem) => (
                       <td key={permissionItem} className="px-4 py-2">
                         <input
                           type="radio"

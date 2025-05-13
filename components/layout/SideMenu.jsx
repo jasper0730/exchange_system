@@ -39,11 +39,10 @@ export default function SideMenu() {
         Swal.fire({
           icon: "success",
           title: "登出成功",
-          timer: 1000,
+          timer: 1500,
           showConfirmButton: false,
-        }).then(() => {
-          router.replace("/login");
-        });
+        })
+        router.replace("/login");
       } catch (error) {
         console.log(error)
         console.error(error || "登出錯誤");

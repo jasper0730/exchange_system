@@ -26,8 +26,6 @@ export async function POST(request) {
       );
     }
 
-    // 打Api拿Role
-
     // 時間換算
     const now = Date.now();
     const expiredStr =
