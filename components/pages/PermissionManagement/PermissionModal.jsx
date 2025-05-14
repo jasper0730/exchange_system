@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { Modal } from "@/components/common";
+import { CloseButton, Modal, Radio } from "@/components/common";
 import { menuItems } from "@/lib/menuItems";
-import { AiOutlineClose } from "react-icons/ai";
 
 export default function PermissionModal({ data, isOpen, onClose, onSubmit, mode }) {
   const [groupName, setGroupName] = useState("");
@@ -42,13 +41,7 @@ export default function PermissionModal({ data, isOpen, onClose, onSubmit, mode 
       <div
         className="p-10 max-w-[700px] w-full rounded-lg shadow-lg bg-white relative"
         onClick={(e) => e.stopPropagation()}>
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
-        >
-          <AiOutlineClose size={24} />
-        </button>
+        <CloseButton onClick={onClose} />
         <h2 className="text-2xl font-bold mb-10 text-gray-900">{mode === "create" ? "新增" : "編輯"}群組</h2>
         <div className="px-5">
           <div className="flex items-center gap-4 mb-5">
@@ -77,8 +70,7 @@ export default function PermissionModal({ data, isOpen, onClose, onSubmit, mode 
                     <td className={`text-left px-4 py-2 text-gray-900`}>{item.label}</td>
                     {["enable", "readonly", "disabled"].map((permissionItem) => (
                       <td key={permissionItem} className="px-4 py-2">
-                        <input
-                          type="radio"
+                        <Radio
                           name={item.href}
                           checked={permissions[item.href] === permissionItem}
                           onChange={() => handlePermissionChange(item.href, permissionItem)}

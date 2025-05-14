@@ -2,20 +2,21 @@
 "use client";
 import { useState } from "react";
 import { PageLayout, PageTitle } from "@/components/ui";
-import { Button } from "@/components/common";
+import { Button, Dropdown, Textarea, Input } from "@/components/common";
 import Swal from "sweetalert2";
 
 const variableOptions = ["會員姓名", "交易金額", "交易時間", "帳戶餘額"];
 
 export default function NotificationSettings() {
-	const [type, setType] = useState("email");
+	const [type, setType] = useState(variableOptions[0]);
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
 
+	// 參數插入
 	const handleVariableInsert = (variable) => {
 		setContent((prev) => `${prev}${variable}`);
 	};
-
+	// 預覽
 	const handlePreview = () => {
 		const formattedContent = content
 			.replace(/\n/g, "<br/>")
@@ -27,12 +28,13 @@ export default function NotificationSettings() {
 			width: 600,
 		});
 	};
-
+	// 清空
 	const handleClear = () => {
+		setType(variableOptions[0])
 		setTitle("");
 		setContent("");
 	};
-
+	// 儲存
 	const handleSave = () => {
 		Swal.fire({
 			icon: "success",
@@ -46,39 +48,37 @@ export default function NotificationSettings() {
 			<PageTitle title="通知模版設定" />
 			<div className="space-y-5 mt-10">
 				<div>
-					<label className="block text-lg font-bold mb-2">通知類型</label>
-					<select
+					<p className="text-lg font-bold mb-2">通知類型</p>
+					<Dropdown
 						value={type}
-						onChange={(e) => setType(e.target.value)}
-						className="border p-2 w-full rounded bg-white text-gray-700"
-					>
-						<option value="email">電子郵件</option>
-						<option value="sms">簡訊</option>
-						<option value="push">推播</option>
-					</select>
+						onChange={setType}
+						options={[
+							"電子郵件",
+							"簡訊",
+							"推播"
+						]}
+					/>
 				</div>
 				<div>
-					<label className="block text-lg font-bold mb-2">標題</label>
-					<input
-						type="text"
+					<p className="text-lg font-bold mb-2">標題</p>
+					<Input
 						placeholder="請輸入標題"
 						value={title}
 						onChange={(e) => setTitle(e.target.value)}
-						className="border p-2 w-full rounded text-gray-700"
+						className="border p-2 w-full rounded text-gray-700 border-gray-300"
 					/>
 				</div>
 				<div>
-					<label className="block text-lg font-bold mb-2">內容</label>
-					<textarea
+					<p className="text-lg font-bold mb-2">內容</p>
+					<Textarea
 						rows="6"
 						placeholder="請輸入內容..."
-						value={content}
+						value={content || ""}
 						onChange={(e) => setContent(e.target.value)}
-						className="border p-2 w-full rounded text-gray-700"
 					/>
 				</div>
 				<div>
-					<label className="block text-lg font-bold mb-2">變數插入</label>
+					<p className="text-lg font-bold mb-2">變數插入</p>
 					<div className="flex flex-wrap gap-2">
 						{variableOptions.map((variable) => (
 							<button

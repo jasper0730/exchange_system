@@ -44,12 +44,22 @@ export default function UploadInfo() {
 	return (
 		<PageLayout>
 			<PageTitle title="仲介公司文件上傳與審核" />
-			<div className="mt-10 border-2 border-dashed border-gray-300 p-10 rounded-lg text-center bg-gray-50">
+			<div
+				className="mt-10 border-2 border-dashed border-gray-300 p-10 rounded-lg text-center bg-gray-50"
+				onDragOver={(e) => e.preventDefault()}
+				onDrop={(e) => {
+					e.preventDefault();
+					const droppedFile = e.dataTransfer.files[0];
+					if (droppedFile) {
+						setFile(droppedFile);
+						simulateUpload();
+					}
+				}}
+			>
 				<FiUploadCloud className="mx-auto text-gray-500 text-5xl mb-4" />
 				<p className="text-gray-700 mb-4">將檔案拖放至此或點擊選擇檔案</p>
 				<input
 					type="file"
-					// accept=".csv, .xlsx"
 					onChange={handleFileChange}
 					className="hidden"
 					id="fileUpload"
@@ -75,7 +85,7 @@ export default function UploadInfo() {
 			)}
 			<div className="flex justify-between items-center mt-10">
 				<a
-					href="/templates/member_upload_template.xlsx"
+					href=""
 					download
 					className="text-gray-900 hover:text-gray-700 flex items-center"
 				>

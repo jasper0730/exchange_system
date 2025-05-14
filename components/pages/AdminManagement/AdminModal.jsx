@@ -1,34 +1,37 @@
 import { useEffect, useState } from "react";
-import { Modal } from "@/components/common";
-import { AiOutlineClose, AiOutlineDown } from "react-icons/ai";
+import { CloseButton, Dropdown, Input, Modal } from "@/components/common";
 import { MdToggleOn, MdToggleOff } from "react-icons/md";
 
 const roleOptions = ["Admin", "Migrant", "Auditor"]; // 暫時用(需從DB拿
 
 export default function AdminModal({ data, isOpen, onClose, onSubmit, mode }) {
-  const initAdmin = {
-    Account: "",
-    Email: "",
-    Status: false,
-    Role: roleOptions[0]
-  };
-  const [admin, setAdmin] = useState(initAdmin);
+  const [Account, setAccount] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Status, setStatus] = useState("");
+  const [Role, setRole] = useState("");
+
 
   useEffect(() => {
     if (mode === "edit" && data) {
-      setAdmin(data);
+      setAccount(data.Account);
+      setEmail(data.Email);
+      setStatus(data.Status);
+      setRole(data.Role);
     } else {
-      setAdmin(initAdmin);
+      setAccount("");
+      setEmail("");
+      setStatus("");
+      setRole("");
     }
   }, [mode, data, isOpen]);
 
-  const isValid = admin.Account?.trim() === "" || admin.Email?.trim() === "";
+  const isValid = Account?.trim() === "" || Email?.trim() === "";
 
   const handleSave = () => {
     if (isValid) return;
-    console.log("儲存資料：", admin);
-    onSubmit(admin);
-    setAdmin(initAdmin);
+    onSubmit({
+      Account, Email, Status, Role
+    });
   };
 
   if (!isOpen) return null;
@@ -38,64 +41,45 @@ export default function AdminModal({ data, isOpen, onClose, onSubmit, mode }) {
       <div
         className="p-10 max-w-[700px] w-full rounded-lg shadow-lg bg-white relative"
         onClick={(e) => e.stopPropagation()}>
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
-        >
-          <AiOutlineClose size={24} />
-        </button>
+        <CloseButton onClick={onClose}/>
         <h2 className="text-2xl font-bold mb-10 text-gray-900">{mode === "create" ? "新增" : "編輯"}使用者</h2>
         <div className="space-y-5">
           <div>
-            <label className="block text-lg font-bold mb-2">帳號</label>
-            <input
-              type="text"
-              className="border p-2 w-full rounded"
+            <p className="text-lg font-bold mb-2">帳號</p>
+            <Input
               placeholder="請輸入帳號"
-              value={admin.Account ?? ""}
-              onChange={(e) => setAdmin({ ...admin, Account: e.target.value })}
+              value={Account ?? ""}
+              onChange={(e) => setAccount(e.target.value)}
             />
           </div>
           <div>
-            <label className="block text-lg font-bold mb-2">Email</label>
-            <input
+            <p className="text-lg font-bold mb-2">Email</p>
+            <Input
               type="email"
-              className="border p-2 w-full rounded"
               placeholder="請輸入 Email"
-              value={admin.Email ?? ""}
-              onChange={(e) => setAdmin({ ...admin, Email: e.target.value })}
+              value={Email ?? ""}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div>
-            <label className="block text-lg font-bold mb-2">權限</label>
+            <p className="text-lg font-bold mb-2">權限</p>
             <div className="relative">
-              <select
-                className="border p-2 w-full rounded appearance-none cursor-pointer"
-                value={admin.Role}
-                onChange={(e) => setAdmin({ ...admin, Role: e.target.value })}
-              >
-                {roleOptions.map((role) => (
-                  <option key={role} value={role}>
-                    {role}
-                  </option>
-                ))}
-              </select>
-              <div className="absolute top-1/2 -translate-y-1/2 right-3 pointer-events-none">
-                <AiOutlineDown size={20} className="text-gray-500" />
-              </div>
+              <Dropdown
+                value={Role}
+                onChange={setRole}
+                options={roleOptions}
+              />
             </div>
           </div>
-
           <div className="flex items-center justify-between">
             <span className="text-lg font-bold">帳號狀態</span>
             <button
               type="button"
-              title={admin.Status ? "啟用" : "停用"}
+              title={Status ? "啟用" : "停用"}
               className="text-gray-500 hover:text-gray-900 p-1 rounded transition-colors cursor-pointer"
-              onClick={() => setAdmin({ ...admin, Status: !admin.Status })}
+              onClick={() => setStatus(prev => !prev)}
             >
-              {admin.Status ? (
+              {Status ? (
                 <MdToggleOn size={30} className="text-green-500" />
               ) : (
                 <MdToggleOff size={30} className="text-gray-400" />

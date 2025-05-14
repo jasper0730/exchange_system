@@ -10,17 +10,18 @@ export async function GET() {
         id: uuidv4(),
         name: "aaa",
         permissions: {
+          PermissionManagement: "enable",
           AdminManagement: "readonly",
           AppManagement: "enable",
           ExchangeMonitor: "enable",
-          PermissionManagement: "enable",
+          ExchangeRate: "enable",
           RegisterReview: "enable",
           RiskNotes: "enable",
           ReportManagement: "enable",
           NotificationSettings: "enable",
           OperationLog: "enable",
           UploadInfo: "enable",
-          MemberFeeback: "enable",
+          MemberFeedback: "enable",
         }
       }]
     });

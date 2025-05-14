@@ -22,7 +22,7 @@ export async function GET(request) {
         NotificationSettings: "enable",
         OperationLog: "enable",
         UploadInfo: "enable",
-        MemberFeeback: "enable",
+        MemberFeedback: "enable",
       }
     });
   } catch (error) {

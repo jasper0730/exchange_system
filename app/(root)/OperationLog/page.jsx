@@ -4,22 +4,30 @@ import { PageLayout, PageTitle, Loader } from "@/components/ui";
 import { FiSearch, FiFileText, FiDownload } from "react-icons/fi";
 import Swal from "sweetalert2";
 import { Button, SearchBar } from "@/components/common";
-import CommonTable, { Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
+import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
 
 export default function OperationLog() {
 	const [logs, setLogs] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [searchValue, setSearchValue] = useState("");
+	const [filteredLogs, setFilteredLogs] = useState([]);
 
+	// 取得操作紀錄資料
 	const fetchData = async () => {
 		try {
 			setIsLoading(true);
-			const response = await fetch("/api/operation-log");
+			const response = await fetch("/api/log");
 			const result = await response.json();
-			if (!response.ok || result.ResultCode !== 0) {
+			if (!response.ok) {
 				throw new Error(result.message || "API 錯誤");
 			}
-			setLogs(result.data);
+
+			if (result.ResultCode !== 0) {
+				setLogs(result.data);
+				setFilteredLogs(result.data);
+			} else {
+				throw new Error(result.message || "資料取得失敗");
+			}
 		} catch (error) {
 			console.error(error.message);
 		} finally {
@@ -27,13 +35,26 @@ export default function OperationLog() {
 		}
 	};
 
+	const handleClear = () => {
+		setSearchValue("");
+	};
+	const handleSearch = () => {
+		const keyword = searchValue.toLowerCase()
+		const result = logs.filter((log) =>
+			log.user.toLowerCase().includes(keyword)
+		);
+		setFilteredLogs(result);
+	};
+
+
+
 	const handleExport = () => {
 		Swal.fire({
 			icon: "success",
 			title: "匯出成功",
 			text: "已下載操作日誌報表。",
 		});
-		// 實際匯出邏輯在此打 API 下載檔案
+		// 打API
 	};
 
 	const handleViewDetail = (log) => {
@@ -49,10 +70,6 @@ export default function OperationLog() {
 		});
 	};
 
-	const filteredLogs = logs.filter((log) =>
-		log.user.toLowerCase().includes(searchValue.toLowerCase())
-	);
-
 	useEffect(() => {
 		fetchData();
 	}, []);
@@ -62,18 +79,30 @@ export default function OperationLog() {
 	return (
 		<PageLayout>
 			<PageTitle title="操作日誌" />
-			<div className="mt-10 flex items-center gap-4">
-				<SearchBar value={searchValue} onChange={(e) => setSearchValue(e.target.value)} placeholder="請輸入操作人員帳號"/>
-				<Button
-					type="button"
-					className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition"
-					onClick={handleExport}
-				>
-					<FiDownload />
-					匯出日誌
-				</Button>
+			<div className="mt-5">
+				<div className="flex justify-end gap-2">
+					<Button style="clear" onClick={handleClear}>清空</Button>
+					<Button onClick={handleSearch}>搜尋</Button>
+				</div>
+				<div className="mt-2 flex items-center gap-4">
+					<div className="flex flex-col gap-2 flex-1">
+						<p className="text-gray-900">關鍵字搜尋</p>
+						<SearchBar
+							value={searchValue || ""}
+							onChange={(e) => setSearchValue(e.target.value)}
+						/>
+					</div>
+				</div>
+				<div className="mt-5 flex justify-end">
+					<Button
+						className="flex items-center gap-2 "
+						onClick={handleExport}
+					>
+						<FiDownload />
+						<span className="whitespace-nowrap">匯出日誌</span>
+					</Button>
+				</div>
 			</div>
-
 			<CommonTable className="mt-5">
 				<Table>
 					<Thead>
@@ -103,11 +132,7 @@ export default function OperationLog() {
 								</TbodyTr>
 							))
 						) : (
-							<TbodyTr>
-								<Td colSpan="4" className="text-center py-4 text-gray-500">
-									沒有符合的資料
-								</Td>
-							</TbodyTr>
+							<NoTableData colSpan={4} />
 						)}
 					</Tbody>
 				</Table>

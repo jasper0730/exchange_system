@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/common";
+import { Button, Radio, Textarea } from "@/components/common";
 import { PageLayout, PageTitle } from "@/components/ui";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -46,26 +46,24 @@ export default function RegisterReviewDetail() {
         <h2 className="text-xl font-semibold">審核結果</h2>
         <div className="flex gap-4 mt-3">
           {["通過", "拒絕", "補件"].map(option => (
-            <label key={option} className="flex items-center gap-1">
-              <input
-                type="radio"
+            <div key={option} className="flex items-center gap-1">
+              <Radio
                 name="reviewResult"
                 value={option}
                 checked={reviewResult === option}
                 onChange={(e) => setReviewResult(e.target.value)}
               />
               {option}
-            </label>
+            </div>
           ))}
         </div>
       </div>
       <div className="mt-5">
-        <h2 className="text-xl font-semibold">備註</h2>
-        <textarea
+        <p className="text-xl font-semibold mb-2">備註</p>
+        <Textarea
           rows="4"
-          className="w-full border border-gray-300 rounded p-2 mt-3"
           placeholder="請輸入備註說明..."
-          value={remark}
+          value={remark || ""}
           onChange={(e) => setRemark(e.target.value)}
         />
       </div>

@@ -9,7 +9,6 @@ export default function Navbar({ onMenuToggle }) {
       <button
         onClick={onMenuToggle}
         className="p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 cursor-pointer"
-        aria-label="Open menu"
       >
         <FiMenu className="text-2xl text-white" />
       </button>

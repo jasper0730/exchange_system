@@ -4,12 +4,15 @@ import { Loader, PageLayout, PageTitle } from "@/components/ui";
 import { FiSearch, FiExternalLink } from "react-icons/fi";
 import { formatDate } from "@/utils/format";
 import Link from "next/link";
+import { Button, SearchBar } from "@/components/common";
 
 export default function RegisterReview() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [searchValue, setSearchValue] = useState("");
 	const [users, setUsers] = useState([]);
+	const [filteredUsers, setFilteredUsers] = useState([]);
 
+	// 取得案件審核資料
 	const fetchData = async () => {
 		try {
 			const response = await fetch("/api/review");
@@ -20,6 +23,7 @@ export default function RegisterReview() {
 
 			if (result.ResultCode === 0) {
 				setUsers(result.data);
+				setFilteredUsers(result.data);
 			} else {
 				throw new Error(result.message || "資料取得失敗");
 			}
@@ -29,30 +33,43 @@ export default function RegisterReview() {
 			setIsLoading(false);
 		}
 	};
+	// 搜尋
+	const handleSearch = () => {
+		const keyword = searchValue.toLowerCase();
+		const results = users.filter(user => {
+			const matchKeyword = user.account.toLowerCase().includes(keyword);
+			return matchKeyword;
+		});
+		setFilteredUsers(results);
+	};
+	// 清空
+	const handleClear = () => {
+		setSearchValue("");
+		setActiveStatus("");
+		setUserStatus("");
+	};
 
 	useEffect(() => {
 		fetchData();
 	}, []);
 
-	const filteredUsers = users.filter(user=> {
-		const keyword = searchValue.toLowerCase()
-		const matchKeyword = user.account.toLowerCase().includes(keyword)
-		return matchKeyword
-	})
 	if (isLoading) return <Loader fullScreen />;
 	return (
 		<PageLayout>
 			<PageTitle title="註冊案件審核" />
-			<div className="mt-10">
-				<div className="flex items-center border border-gray-300 rounded px-3 py-2 w-100 bg-white">
-					<FiSearch className="text-gray-500 text-lg" />
-					<input
-						type="text"
-						placeholder="請輸入關鍵字"
-						className="ml-2 outline-none flex-1 text-gray-700"
-						value={searchValue || ""}
-						onChange={(e) => setSearchValue(e.target.value)}
-					/>
+			<div className="mt-5">
+				<div className="flex justify-end gap-2">
+					<Button style="clear" onClick={handleClear}>清空</Button>
+					<Button onClick={handleSearch}>搜尋</Button>
+				</div>
+				<div className="mt-2 flex items-center gap-4">
+					<div className="flex flex-col gap-2 flex-1">
+						<p className="text-gray-900">關鍵字搜尋</p>
+						<SearchBar
+							value={searchValue || ""}
+							onChange={(e) => setSearchValue(e.target.value)}
+						/>
+					</div>
 				</div>
 				<div className="mt-5">
 					<div className="overflow-x-auto w-full">

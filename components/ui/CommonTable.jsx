@@ -55,3 +55,11 @@ export default function CommonTable({ children, className = "" }) {
     </div>
   );
 }
+
+export function NoTableData({ text = "無資料可顯示", colSpan }) {
+  return (
+    <TbodyTr>
+      <Td className={`text-center py-10 text-gray-500`} colSpan={colSpan}>{text}</Td>
+    </TbodyTr>
+  );
+}

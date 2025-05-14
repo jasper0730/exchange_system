@@ -8,8 +8,8 @@ import { AdminModal } from "@/components/pages/AdminManagement";
 import Swal from "sweetalert2";
 import { useAuthStore } from "@/store/authStore";
 import { usePathname } from "next/navigation";
-import { Button } from "@/components/common";
-import CommonTable, { Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
+import { Button, Dropdown, SearchBar } from "@/components/common";
+import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
 
 
 export default function AdminManagement() {
@@ -17,10 +17,11 @@ export default function AdminManagement() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [admins, setAdmins] = useState([]);
 	const [searchValue, setSearchValue] = useState("");
-	const [statusFilter, setStatusFilter] = useState("");
+	const [activeStatus, setActiveStatus] = useState("");
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalMode, setModalMode] = useState("create");
 	const [editAdmin, setEditAdmin] = useState(null);
+	const [filteredAdmins, setFilteredAdmins] = useState([]);
 	const { routes } = useAuthStore();
 	const segments = pathname.split("/").filter(Boolean);
 	const pageKey = segments[0];
@@ -31,6 +32,7 @@ export default function AdminManagement() {
 	console.log("enableMode", enableMode);
 	console.log("readMode", readMode);
 
+	// 取的所有後台使用這資料
 	const fetchData = async () => {
 		try {
 			const response = await fetch("/api/admin");
@@ -41,6 +43,7 @@ export default function AdminManagement() {
 
 			if (result.ResultCode === 0) {
 				setAdmins(result.Admins);
+				setFilteredAdmins(result.Admins);
 			} else {
 				throw new Error(result.message || "資料取得失敗");
 			}
@@ -50,8 +53,29 @@ export default function AdminManagement() {
 			setIsLoading(false);
 		}
 	};
+	// 搜尋
+	const handleSearch = () => {
+		const keyword = searchValue.toLowerCase();
+		const results = admins.filter(admin => {
+			const matchKeyword =
+				admin.Account.toLowerCase().includes(searchValue.toLowerCase());
 
+			const matchStatus =
+				activeStatus === "" ||
+				(activeStatus === "啟用" && admin.Status) ||
+				(activeStatus === "停用" && !admin.Status);
+
+			return matchKeyword && matchStatus;
+		});
+		setFilteredAdmins(results);
+	};
+	// 清空
+	const handleClear = () => {
+		setSearchValue("");
+	};
+	// 建立 or 編輯
 	const handleSubmit = async (payload) => {
+		console.log(payload)
 		try {
 			setIsLoading(true);
 			const apiUrl = modalMode === "create" ? "/api/admin" : `/api/admin/${editAdmin.id}`;
@@ -107,24 +131,24 @@ export default function AdminManagement() {
 			setIsLoading(false);
 		}
 	};
-
+	// 刪除
 	const handleDelete = (id) => {
 		// 打api更新資料
 		// fetchData 更新畫面
 	};
-
+	// 打開建立Modal
 	const openCreateModal = () => {
 		setModalMode("create");
 		setEditAdmin(null);
 		setIsModalOpen(true);
 	};
-
+	// 打開編輯Modal
 	const openEditModal = (admin) => {
 		setModalMode("edit");
 		setEditAdmin(admin);
 		setIsModalOpen(true);
 	};
-
+	// 關閉Modal
 	const closeModal = () => {
 		setIsModalOpen(false);
 		setEditAdmin(null);
@@ -134,48 +158,34 @@ export default function AdminManagement() {
 		fetchData();
 	}, []);
 
-	const filteredAdmins = admins.filter(admin => {
-		const matchKeyword =
-			admin.Account.toLowerCase().includes(searchValue.toLowerCase());
-
-		const matchStatus =
-			statusFilter === "" ||
-			(statusFilter === "enabled" && admin.Status) ||
-			(statusFilter === "disabled" && !admin.Status);
-
-		return matchKeyword && matchStatus;
-	});
-
 	if (isLoading) return <Loader fullScreen />;
 	return (
 		<>
 			<PageLayout>
 				<PageTitle title="後台使用者管理" />
-				<div className="mt-10">
-					<div className="flex justify-between items-center">
-						<div className="flex items-center gap-2">
-							<div className="flex items-center border border-gray-300 rounded px-3 py-2 w-100 bg-white">
-								<FiSearch className="text-gray-500 text-lg" />
-								<input
-									type="text"
-									placeholder="請輸入關鍵字"
-									className="ml-2 outline-none flex-1 text-gray-700"
-									value={searchValue || ""}
-									onChange={(e) => setSearchValue(e.target.value)}
-								/>
-							</div>
-							<select
-								value={statusFilter}
-								onChange={(e) => setStatusFilter(e.target.value)}
-								className="border border-gray-300 rounded px-3 py-2 bg-white text-gray-700"
-							>
-								<option value="">
-									啟用狀態
-								</option>
-								<option value="enabled">啟用</option>
-								<option value="disabled">停用</option>
-							</select>
+				<div className="mt-5">
+					<div className="flex justify-end gap-2">
+						<Button style="clear" onClick={handleClear}>清空</Button>
+						<Button onClick={handleSearch}>搜尋</Button>
+					</div>
+					<div className="mt-2 flex items-center gap-4">
+						<div className="flex flex-col gap-2 flex-1">
+							<p className="text-gray-900">關鍵字搜尋</p>
+							<SearchBar
+								value={searchValue || ""}
+								onChange={(e) => setSearchValue(e.target.value)}
+							/>
 						</div>
+						<div className="flex flex-col gap-2 flex-1">
+							<p className="text-gray-900">啟用狀態</p>
+							<Dropdown
+								value={activeStatus}
+								onChange={setActiveStatus}
+								options={["啟用", "停用"]}
+							/>
+						</div>
+					</div>
+					<div className="mt-5 flex justify-end">
 						<Button
 							onClick={openCreateModal}
 						>
@@ -195,7 +205,7 @@ export default function AdminManagement() {
 									</TheadTr>
 								</Thead>
 								<Tbody>
-									{filteredAdmins && filteredAdmins.map((admin, index) => (
+									{filteredAdmins.length > 0 ? filteredAdmins.map((admin, index) => (
 										<TbodyTr key={admin.Id}>
 											<Td>{index + 1}</Td>
 											<Td>{admin.Account}</Td>
@@ -232,7 +242,9 @@ export default function AdminManagement() {
 												</button>
 											</Td>
 										</TbodyTr>
-									))}
+									))
+										: <NoTableData colSpan={5} />
+									}
 								</Tbody>
 							</Table>
 						</CommonTable>

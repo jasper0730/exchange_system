@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import { Modal } from "@/components/common";
-import { AiOutlineClose, AiOutlineDown } from "react-icons/ai";
+import { CloseButton, Input, Modal } from "@/components/common";
+import { AiOutlineDown } from "react-icons/ai";
 import { MdToggleOn, MdToggleOff } from "react-icons/md";
 
 export default function AppModal({ data, isOpen, onClose, onSubmit }) {
-
-
-
   const handleSave = () => {
     if (isValid) return;
     console.log("儲存資料：", admin);
@@ -20,13 +17,7 @@ export default function AppModal({ data, isOpen, onClose, onSubmit }) {
       <div
         className="p-10 max-w-[700px] w-full rounded-lg shadow-lg bg-white relative"
         onClick={(e) => e.stopPropagation()}>
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
-        >
-          <AiOutlineClose size={24} />
-        </button>
+        <CloseButton onClose={onClose}/>
         <h2 className="text-2xl font-bold mb-10 text-gray-900">會員</h2>
         <div className="space-y-5">
           <div>
@@ -34,17 +25,16 @@ export default function AppModal({ data, isOpen, onClose, onSubmit }) {
             <p>{data.name}</p>
           </div>
           <div>
-            <label className="block text-lg font-bold mb-2">Email</label>
-            <input
+            <p className="text-lg font-bold mb-2">Email</p>
+            <Input
               type="email"
-              className="border p-2 w-full rounded"
               placeholder="請輸入 Email"
               value={admin.Email ?? ""}
               onChange={(e) => setAdmin({ ...admin, Email: e.target.value })}
             />
           </div>
           <div>
-            <label className="block text-lg font-bold mb-2">權限</label>
+            <p className="text-lg font-bold mb-2">權限</p>
             <div className="relative">
               <select
                 className="border p-2 w-full rounded appearance-none cursor-pointer"

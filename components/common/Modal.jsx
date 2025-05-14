@@ -2,7 +2,6 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { AiOutlineClose } from "react-icons/ai";
 
 const Modal = ({ className, isOpen, onClose, children }) => {
   useEffect(() => {

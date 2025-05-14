@@ -4,6 +4,7 @@ import { Loader, PageLayout, PageTitle } from "@/components/ui";
 import { Bar, Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import StatCard from "@/components/pages/ExchangeMonitor/StatCard";
+import { Calender } from "@/components/common";
 
 export default function ExchangeMonitor() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -11,6 +12,7 @@ export default function ExchangeMonitor() {
 	const [dateRange, setDateRange] = useState("today");
 	const [customRange, setCustomRange] = useState({ from: "", to: "" });
 
+	// 取得匯兌資料
 	const fetchData = async () => {
 		try {
 			const params = new URLSearchParams();
@@ -40,12 +42,11 @@ export default function ExchangeMonitor() {
 	};
 
 	const currentStat = stats[dateRange];
-
+	// 日期
 	const handleCustomDateChange = (field, value) => {
 		setCustomRange((prev) => ({ ...prev, [field]: value }));
 		setDateRange("custom");
 	};
-
 	// 交易狀態統計的圖表設定
 	const barData = {
 		labels: ["已完成", "待審核", "失敗"],
@@ -61,7 +62,6 @@ export default function ExchangeMonitor() {
 			},
 		],
 	};
-
 	// 幣別交易金額占比的圖表設定
 	const doughnutData = {
 		labels: stats.currencies && Object.keys(stats.currencies),
@@ -96,21 +96,17 @@ export default function ExchangeMonitor() {
 				))}
 				<div className="flex items-center gap-2">
 					<div>
-						<label>起：</label>
-						<input
-							type="date"
+						<p>起：</p>
+						<Calender
 							value={customRange.from}
 							onChange={(e) => handleCustomDateChange("from", e.target.value)}
-							className="border px-2 py-1 rounded text-gray-700"
 						/>
 					</div>
 					<div>
-						<label>迄：</label>
-						<input
-							type="date"
+						<p>迄：</p>
+						<Calender
 							value={customRange.to}
 							onChange={(e) => handleCustomDateChange("to", e.target.value)}
-							className="border px-2 py-1 rounded text-gray-700"
 						/>
 					</div>
 				</div>

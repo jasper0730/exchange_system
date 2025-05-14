@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Loader, PageLayout, PageTitle } from "@/components/ui";
-import { FiSearch } from "react-icons/fi";
+import { CommonTable, Loader, PageLayout, PageTitle } from "@/components/ui";
 import { MdToggleOff, MdToggleOn } from "react-icons/md";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 import { formatDate } from "@/utils/format";
-import { SearchBar } from "@/components/common";
+import { Button, Dropdown, SearchBar } from "@/components/common";
+import { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
 
 export default function AppManagement() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -13,9 +13,9 @@ export default function AppManagement() {
 	const [activeStatus, setActiveStatus] = useState("");
 	const [userStatus, setUserStatus] = useState("");
 	const [users, setUsers] = useState([]);
+	const [filteredUsers, setFilteredUsers] = useState([]);
 
-
-
+	// 取得會員資料
 	const fetchData = async () => {
 		try {
 			const response = await fetch("/api/user");
@@ -26,6 +26,7 @@ export default function AppManagement() {
 
 			if (result.ResultCode === 0) {
 				setUsers(result.getUser);
+				setFilteredUsers(result.getUser);
 			} else {
 				throw new Error(result.message || "資料取得失敗");
 			}
@@ -35,84 +36,104 @@ export default function AppManagement() {
 			setIsLoading(false);
 		}
 	};
+	// 搜尋
+	const handleSearch = () => {
+		const keyword = searchValue.toLowerCase();
+		const results = users.filter(user => {
+			const matchKeyword = user.account.toLowerCase().includes(keyword);
+
+			const matchActiveStatus =
+				activeStatus === "" ||
+				(activeStatus === "啟用" && user.status) ||
+				(activeStatus === "停用" && !user.status);
+
+			const matchUserStatus = userStatus === "" || user.remark === userStatus;
+
+			return matchKeyword && matchActiveStatus && matchUserStatus;
+		});
+		setFilteredUsers(results);
+	};
+	// 清空
+	const handleClear = () => {
+		setSearchValue("");
+		setActiveStatus("");
+		setUserStatus("");
+	};
 
 	useEffect(() => {
 		fetchData();
 	}, []);
-
-	const filteredUsers = users.filter(user => {
-		const keyword = searchValue.toLowerCase();
-		const matchKeyword = user.account.toLowerCase().includes(keyword);
-		const matchActiveStatus =
-			activeStatus === "" ||
-			(activeStatus === "enabled" && user.status) ||
-			(activeStatus === "disabled" && !user.status);
-		const matchUserStatus = userStatus === "" || user.remark === userStatus;
-		return matchKeyword && matchActiveStatus && matchUserStatus;
-
-	});
 
 	if (isLoading) return <Loader fullScreen />;
 	return (
 		<>
 			<PageLayout>
 				<PageTitle title="App 會員管理" />
-				<div className="mt-10">
-					<div className="flex items-center gap-2">
-						<SearchBar
-							placeholder="請輸入關鍵字"
-							value={searchValue || ""}
-							onChange={(e) => setSearchValue(e.target.value)}
-						/>
-						<select
-							value={activeStatus}
-							onChange={(e) => setActiveStatus(e.target.value)}
-							className="border border-gray-300 rounded px-3 py-2 bg-white text-gray-700"
-						>
-							<option value="">啟用狀態</option>
-							<option value="enabled">啟用</option>
-							<option value="disabled">停用</option>
-						</select>
-						<select
-							value={userStatus}
-							onChange={(e) => setUserStatus(e.target.value)}
-							className="border border-gray-300 rounded px-3 py-2 bg-white text-gray-700"
-						>
-							<option value="">會員狀態</option>
-							<option value="正常">正常</option>
-							<option value="未生效">未生效</option>
-							<option value="註冊待審">註冊待審</option>
-							<option value="補件待審">補件待審</option>
-							<option value="審核中">審核中</option>
-							<option value="驗證失敗-待補件">驗證失敗-待補件</option>
-							<option value="限制使用">限制使用</option>
-							<option value="黑名單">黑名單</option>
-							<option value="註銷">註銷</option>
-						</select>
+				<div className="mt-5">
+					<div className="flex justify-end gap-2">
+						<Button style="clear" onClick={handleClear}>清空</Button>
+						<Button onClick={handleSearch}>搜尋</Button>
+					</div>
+					<div className="mt-2 flex items-center gap-4">
+						<div className="flex flex-col gap-2 flex-1">
+							<p className="text-gray-900">關鍵字搜尋</p>
+							<SearchBar
+								value={searchValue || ""}
+								onChange={(e) => setSearchValue(e.target.value)}
+							/>
+						</div>
+						<div className="flex flex-col gap-2 flex-1">
+							<p className="text-gray-900">啟用狀態</p>
+							<Dropdown
+								value={activeStatus}
+								onChange={setActiveStatus}
+								options={["啟用", "停用"]}
+							/>
+						</div>
+						<div className="flex flex-col gap-2 flex-1">
+							<p className="text-gray-900">
+								會員狀態
+							</p>
+							<Dropdown
+								value={userStatus}
+								onChange={setUserStatus}
+								options={[
+									"正常",
+									"未生效",
+									"註冊待審",
+									"補件待審",
+									"審核中",
+									"驗證失敗-待補件",
+									"限制使用",
+									"黑名單",
+									"註銷",
+								]}
+							/>
+						</div>
 					</div>
 					<div className="mt-5">
-						<div className="overflow-x-auto w-full">
-							<table className="min-w-full bg-white border border-gray-200 text-left">
-								<thead>
-									<tr className="bg-gray-900 text-white">
-										<th className="px-4 py-2 w-[10%]">編號</th>
-										<th className="px-4 py-2 w-[30%]">帳號</th>
-										<th className="px-4 py-2 w-[20%]">註冊日期</th>
-										<th className="px-4 py-2 w-[15%]">狀態</th>
-										<th className="px-4 py-2 w-[10%]">啟用</th>
-										<th className="px-4 py-2 w-[15%]">操作</th>
-									</tr>
-								</thead>
-								<tbody>
-									{filteredUsers && filteredUsers.map((user, index) => (
-										<tr key={user.userId}>
-											<td className="px-4 py-2">{index + 1}</td>
-											<td className="px-4 py-2">{user.account}</td>
-											<td className="px-4 py-2">{formatDate(user.createTime)}</td>
-											<td className="px-4 py-2">
+						<CommonTable>
+							<Table>
+								<Thead>
+									<TheadTr>
+										<Th className="w-[10%]">編號</Th>
+										<Th className="w-[30%]">帳號</Th>
+										<Th className="w-[20%]">註冊日期</Th>
+										<Th className="w-[15%]">狀態</Th>
+										<Th className="w-[10%]">啟用</Th>
+										<Th className="w-[15%]">操作</Th>
+									</TheadTr>
+								</Thead>
+								<Tbody>
+									{filteredUsers.length > 0 ? filteredUsers.map((user, index) => (
+										<TbodyTr key={user.userId}>
+											<Td>{index + 1}</Td>
+											<Td>{user.account}</Td>
+											<Td>{formatDate(user.createTime)}</Td>
+											<Td>
 												{user.remark}
-											</td>
-											<td className="px-4 py-2">
+											</Td>
+											<Td>
 												<button
 													type="button"
 													title={user.status ? "啟用" : "停用"}
@@ -125,8 +146,8 @@ export default function AppManagement() {
 														<MdToggleOff size={30} className="text-gray-400" />
 													)}
 												</button>
-											</td>
-											<td className="px-4 py-2">
+											</Td>
+											<Td>
 												<button
 													type="button"
 													title="編輯"
@@ -135,12 +156,14 @@ export default function AppManagement() {
 												>
 													<FaEdit size={18} />
 												</button>
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						</div>
+											</Td>
+										</TbodyTr>
+									))
+										: <NoTableData colSpan={6} />
+									}
+								</Tbody>
+							</Table>
+						</CommonTable>
 					</div>
 				</div>
 			</PageLayout>
