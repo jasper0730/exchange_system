@@ -2,8 +2,7 @@
 import { useEffect, useState } from "react";
 import { Loader, PageLayout, PageTitle } from "@/components/ui";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { FiSearch, FiCheckCircle, FiXCircle } from "react-icons/fi";
-import { MdToggleOn, MdToggleOff } from "react-icons/md";
+import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { AdminModal } from "@/components/pages/AdminManagement";
 import Swal from "sweetalert2";
 import { useAuthStore } from "@/store/authStore";
@@ -23,6 +22,7 @@ export default function AdminManagement() {
 	const [editAdmin, setEditAdmin] = useState(null);
 	const [filteredAdmins, setFilteredAdmins] = useState([]);
 	const { routes } = useAuthStore();
+	// 權限
 	const segments = pathname.split("/").filter(Boolean);
 	const pageKey = segments[0];
 	const current = routes?.[pageKey];
@@ -58,7 +58,7 @@ export default function AdminManagement() {
 		const keyword = searchValue.toLowerCase();
 		const results = admins.filter(admin => {
 			const matchKeyword =
-				admin.Account.toLowerCase().includes(searchValue.toLowerCase());
+				admin.Account.toLowerCase().includes(keyword);
 
 			const matchStatus =
 				activeStatus === "" ||

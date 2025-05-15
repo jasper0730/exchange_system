@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
 export default function Dropdown({ options = [], value, onChange, placeholder = "請選擇...", defaultText }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,11 +25,14 @@ export default function Dropdown({ options = [], value, onChange, placeholder = 
     <div className="relative inline-block min-w-60 w-full" ref={dropdownRef}>
       <button
         type="button"
-        className="w-full border-gray-300 border px-4 py-2 rounded text-left bg-white text-gray-700 flex justify-between items-center"
+        className="w-full cursor-pointer border-gray-300 border px-4 py-2 rounded text-left bg-white text-gray-700 flex justify-between items-center"
         onClick={() => setIsOpen(!isOpen)}
       >
         {value || placeholder}
-        <FiChevronDown className="ml-2" />
+        {
+          isOpen ? <FiChevronUp className="ml-2" /> : <FiChevronDown className="ml-2" />
+        }
+
       </button>
 
       {isOpen && (

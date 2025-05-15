@@ -81,28 +81,30 @@ export default function ExchangeMonitor() {
 	return (
 		<PageLayout>
 			<PageTitle title="匯兌交易監控" />
-			<div className="flex gap-4 mt-10 mb-5 items-center flex-wrap">
-				{["today", "week", "month"].map((range) => (
-					<button
-						key={range}
-						onClick={() => setDateRange(range)}
-						className={`px-4 py-2 rounded cursor-pointer ${dateRange === range ? "bg-gray-900 text-white" : "bg-gray-200 text-gray-700"
-							}`}
-					>
-						{range === "today" && "今日"}
-						{range === "week" && "本週"}
-						{range === "month" && "本月"}
-					</button>
-				))}
+			<div className="flex gap-4 mt-10 mb-5 items-center flex-wrap justify-between">
+				<div className="flex gap-2">
+					{["today", "week", "month"].map((range) => (
+						<button
+							key={range}
+							onClick={() => setDateRange(range)}
+							className={`px-4 py-2 rounded cursor-pointer ${dateRange === range ? "bg-gray-900 text-white" : "bg-gray-200 text-gray-700"
+								}`}
+						>
+							{range === "today" && "今日"}
+							{range === "week" && "本週"}
+							{range === "month" && "本月"}
+						</button>
+					))}
+				</div>
 				<div className="flex items-center gap-2">
-					<div>
+					<div className="flex items-center">
 						<p>起：</p>
 						<Calender
 							value={customRange.from}
 							onChange={(e) => handleCustomDateChange("from", e.target.value)}
 						/>
 					</div>
-					<div>
+					<div className="flex items-center">
 						<p>迄：</p>
 						<Calender
 							value={customRange.to}

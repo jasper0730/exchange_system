@@ -5,10 +5,13 @@ import SideMenu from "@/components/layout/SideMenu";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import AuthGuard from "@/components/auth/AuthGuard";
+import 'overlayscrollbars/overlayscrollbars.css';
+import { useUIStore } from "@/store/uiStore";
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { sideMenuCollapsed } = useUIStore();
 
   function handleMenuClick() {
     setMenuOpen((prev) => !prev);
@@ -46,7 +49,7 @@ export default function RootLayout({ children }) {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="xl:ml-[300px] mt-16 xl:mt-0">{children}</div>
+      <div className={`mt-16 xl:mt-0 ${sideMenuCollapsed ? "xl:ml-[80px]" : "xl:ml-[300px]"}`}>{children}</div>
     </AuthGuard>
   );
 }

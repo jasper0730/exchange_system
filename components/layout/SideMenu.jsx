@@ -3,17 +3,20 @@ import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { FiLogOut } from "react-icons/fi";
+import { HiChevronDoubleLeft, HiChevronDoubleRight } from "react-icons/hi";
 import { Loader } from "@/components/ui";
 import { menuItems } from "@/lib/menuItems";
 import { useAuthStore } from "@/store/authStore";
+import { useUIStore } from "@/store/uiStore";
 import Swal from "sweetalert2";
-
+import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 
 export default function SideMenu() {
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { sideMenuCollapsed, toggleSideMenuCollapsed } = useUIStore();
   const { routes } = useAuthStore();
   const pathname = usePathname();
+  const [isLoading, setIsLoading] = useState(false);
   const filteredMenuItems = menuItems.filter(item => routes[item.href] && routes[item.href] !== "disabled");
 
   const handleLogout = async () => {
@@ -41,10 +44,9 @@ export default function SideMenu() {
           title: "登出成功",
           timer: 1500,
           showConfirmButton: false,
-        })
+        });
         router.replace("/login");
       } catch (error) {
-        console.log(error)
         console.error(error || "登出錯誤");
         router.replace("/login");
       } finally {
@@ -55,37 +57,97 @@ export default function SideMenu() {
 
   if (isLoading) return <Loader fullScreen />;
   return (
-    <aside className="fixed top-0 left-0 h-dvh w-[300px] bg-gray-900 text-white flex flex-col py-10 shadow-lg overflow-y-auto overflow-x-hidden justify-between">
-      <div className="flex flex-col px-3 mb-10">
-        <div className="text-xl font-bold text-white select-none px-6">
-          Logo
+    <aside className={`fixed top-0 left-0 h-dvh bg-gray-900 text-white flex flex-col pt-10 shadow-lg transition-all duration-300 
+        ${sideMenuCollapsed ? "w-[80px]" : "w-[300px]"}`}>
+      <button
+        type="button"
+        className="absolute bg-gray-900  rounded-full right-0 top-[5px] translate-x-1/2 cursor-pointer flex justify-center items-center w-8 h-8 group"
+        onClick={toggleSideMenuCollapsed}
+      >
+        {sideMenuCollapsed ? (
+          <HiChevronDoubleRight
+            className="transform transition-transform duration-300 group-hover:translate-x-0.5"
+            size={16}
+          />) : (
+          <HiChevronDoubleLeft
+            className="transform transition-transform duration-300 group-hover:-translate-x-0.5"
+            size={16}
+          />)
+        }
+
+      </button>
+      <div className="flex flex-col  h-full">
+        <div className="h-10">
+          <Link
+            href="/"
+            className={`h-10 rounded-full bg-white text-xl font-bold text-gray-900  flex items-center justify-center 
+        ${sideMenuCollapsed ? "mx-auto w-10" : "w-20 mx-6"}`}>
+            {sideMenuCollapsed ? "L" : "LOGO"}
+          </Link>
         </div>
-        <nav className="flex flex-col gap-2 mt-10">
-          {filteredMenuItems.map((item) => (
-            <Link
-              key={item.label}
-              href={`/${item.href}`}
-              className={`rounded-md px-6 py-3 text-base font-medium transition-colors duration-200 hover:bg-gray-700 focus:bg-gray-700 focus:outline-none ${pathname === `/${item.href}` ? "bg-gray-700" : ""
-                }`}
-            >
-              <span className="inline-flex items-center gap-2">
-                <span className="text-lg">{item.icon}</span>
-                {item.label}
-              </span>
-            </Link>
-          ))}
-        </nav>
-      </div>
-      <div className="w-full px-3">
-        <button
-          type="button"
-          className="text-left w-full rounded-md px-6 py-3 text-base font-medium transition-colors duration-200 hover:bg-gray-700 cursor-pointer flex items-center"
-          onClick={handleLogout}
-        >
-          <FiLogOut className="inline mr-2 align-text-bottom" />
-          <span>登出</span>
-        </button>
-      </div>
-    </aside>
+        <div className="flex flex-col justify-between overflow-y-auto overflow-x-hidden h-[calc(100dvh-84px)] mt-6">
+          <OverlayScrollbarsComponent
+            options={{
+              scrollbars: {
+                theme: "os-theme-light",
+                clickScroll: true,
+              },
+            }}
+            defer
+          >
+
+            <nav className="flex flex-col gap-2 mb-10 px-3">
+              {filteredMenuItems.map((item) => (
+                <Link
+                  key={item.label}
+                  href={`/${item.href}`}
+                  className={`rounded-md py-3 text-base font-medium transition-colors duration-200 hover:bg-gray-700 focus:bg-gray-700 focus:outline-none 
+                      ${pathname === `/${item.href}` ? "bg-gray-700" : ""}
+                      ${sideMenuCollapsed ? "text-center" : "px-6"}
+                      `}
+                >
+                  <span className={`inline-flex items-center ${sideMenuCollapsed ? "" : "gap-2"}`}>
+                    <span className="text-lg">{item.icon}</span>
+                    <span
+                      className={`transition duration-[0,0] ${sideMenuCollapsed ? "opacity-0" : "opacity-100 delay-150"}`}
+                    >
+                      {!sideMenuCollapsed && item.label}
+                    </span>
+
+                  </span>
+
+                </Link>
+              ))}
+            </nav>
+            <div className="px-3 pb-3">
+              <button
+                type="button"
+                className={`text-left w-full rounded-md py-3 text-base font-medium transition-colors duration-200 hover:bg-gray-700 cursor-pointer flex items-center
+                  ${sideMenuCollapsed ? "justify-center" : "px-6"}`}
+                onClick={handleLogout}
+              >
+                <span className={`inline-flex items-center ${sideMenuCollapsed ? "" : "gap-2"}`}>
+                  {sideMenuCollapsed ? (
+                    <span className="text-lg"><FiLogOut /></span>
+                  ) : (
+                    <>
+                      <span className="text-lg"><FiLogOut /></span>
+                      <span
+                        className={`transition duration-[0,0] ${sideMenuCollapsed ? "opacity-0" : "opacity-100 delay-150"}`}
+                      >
+                        {!sideMenuCollapsed && "登出"}
+                      </span>
+
+                    </>
+                  )}
+                </span>
+              </button>
+            </div>
+
+
+          </OverlayScrollbarsComponent>
+        </div>
+      </div >
+    </aside >
   );
 }
