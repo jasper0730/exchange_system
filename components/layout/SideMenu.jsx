@@ -95,7 +95,6 @@ export default function SideMenu() {
             }}
             defer
           >
-
             <nav className="flex flex-col gap-2 mb-10 px-3">
               {filteredMenuItems.map((item) => (
                 <Link
@@ -113,9 +112,7 @@ export default function SideMenu() {
                     >
                       {!sideMenuCollapsed && item.label}
                     </span>
-
                   </span>
-
                 </Link>
               ))}
             </nav>
@@ -137,14 +134,11 @@ export default function SideMenu() {
                       >
                         {!sideMenuCollapsed && "登出"}
                       </span>
-
                     </>
                   )}
                 </span>
               </button>
             </div>
-
-
           </OverlayScrollbarsComponent>
         </div>
       </div >
