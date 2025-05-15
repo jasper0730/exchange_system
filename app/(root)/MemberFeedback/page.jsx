@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { CommonTable, PageLayout, PageTitle } from "@/components/ui";
+import { PageLayout, PageTitle } from "@/components/ui";
 import { Button, Dropdown, SearchBar } from "@/components/common";
 import { FiEye } from "react-icons/fi";
 import FeedbackModal from "@/components/pages/MemberFeedback/FeedbackModal";
-import { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
+import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
 
 const feedbackTypes = ["問題回報", "建議"];
 

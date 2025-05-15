@@ -1,12 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import SideMenu from "@/components/layout/SideMenu";
+import { SideMenu, Navbar } from "@/components/layout";
 import { motion, AnimatePresence } from "framer-motion";
-import Navbar from "@/components/layout/Navbar";
-import AuthGuard from "@/components/auth/AuthGuard";
+import { AuthGuard } from "@/components/auth";
 import 'overlayscrollbars/overlayscrollbars.css';
-import { useUIStore } from "@/store/uiStore";
+import { useUIStore } from "@/store";
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();

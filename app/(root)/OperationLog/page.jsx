@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { PageLayout, PageTitle, Loader } from "@/components/ui";
-import { FiSearch, FiFileText, FiDownload } from "react-icons/fi";
+import { FiFileText, FiDownload } from "react-icons/fi";
 import Swal from "sweetalert2";
 import { Button, SearchBar } from "@/components/common";
 import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";

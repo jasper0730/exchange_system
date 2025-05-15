@@ -5,7 +5,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { AdminModal } from "@/components/pages/AdminManagement";
 import Swal from "sweetalert2";
-import { useAuthStore } from "@/store/authStore";
+import { useAuthStore } from "@/store";
 import { usePathname } from "next/navigation";
 import { Button, Dropdown, SearchBar } from "@/components/common";
 import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";

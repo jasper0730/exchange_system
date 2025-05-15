@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
-import { CommonTable, Loader, PageLayout, PageTitle } from "@/components/ui";
+import { Loader, PageLayout, PageTitle } from "@/components/ui";
 import { PermissionModal } from "@/components/pages/PermissionManagement";
 import Swal from "sweetalert2";
 import { Button, SearchBar } from "@/components/common";
-import { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
+import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
 
 export default function PermissionManagement() {
   const [isLoading, setIsLoading] = useState(true);
@@ -162,7 +162,7 @@ export default function PermissionManagement() {
                       </Td>
                     </TbodyTr>
                   ))
-                    : <NoTableData colSpan={3}/>
+                    : <NoTableData colSpan={3} />
                   }
                 </Tbody>
               </Table>

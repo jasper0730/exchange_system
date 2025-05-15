@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Loader, PageLayout, PageTitle } from "@/components/ui";
-import { FiSearch, FiExternalLink } from "react-icons/fi";
+import { FiExternalLink } from "react-icons/fi";
 import { formatDate } from "@/utils/format";
 import Link from "next/link";
 import { Button, SearchBar } from "@/components/common";

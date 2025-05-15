@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { CommonTable, Loader, PageLayout, PageTitle } from "@/components/ui";
+import { Loader, PageLayout, PageTitle } from "@/components/ui";
 import { MdToggleOff, MdToggleOn } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { formatDate } from "@/utils/format";
 import { Button, Dropdown, SearchBar } from "@/components/common";
-import { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
+import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
 
 export default function AppManagement() {
 	const [isLoading, setIsLoading] = useState(true);

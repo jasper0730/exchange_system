@@ -6,8 +6,7 @@ import { FiLogOut } from "react-icons/fi";
 import { HiChevronDoubleLeft, HiChevronDoubleRight } from "react-icons/hi";
 import { Loader } from "@/components/ui";
 import { menuItems } from "@/lib/menuItems";
-import { useAuthStore } from "@/store/authStore";
-import { useUIStore } from "@/store/uiStore";
+import { useUIStore, useAuthStore } from "@/store";
 import Swal from "sweetalert2";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 
@@ -99,6 +98,7 @@ export default function SideMenu() {
               {filteredMenuItems.map((item) => (
                 <Link
                   key={item.label}
+                  title={item.label}
                   href={`/${item.href}`}
                   className={`rounded-md py-3 text-base font-medium transition-colors duration-200 hover:bg-gray-700 focus:bg-gray-700 focus:outline-none 
                       ${pathname === `/${item.href}` ? "bg-gray-700" : ""}
@@ -119,6 +119,7 @@ export default function SideMenu() {
             <div className="px-3 pb-3">
               <button
                 type="button"
+                title="登出"
                 className={`text-left w-full rounded-md py-3 text-base font-medium transition-colors duration-200 hover:bg-gray-700 cursor-pointer flex items-center
                   ${sideMenuCollapsed ? "justify-center" : "px-6"}`}
                 onClick={handleLogout}
