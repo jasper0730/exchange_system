@@ -1,21 +1,20 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Loader, PageLayout, PageTitle } from "@/components/ui";
-import { MdToggleOff, MdToggleOn } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
-import { formatDate } from "@/utils/format";
 import { Button, Dropdown, IconButton, SearchBar } from "@/components/common";
 import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/store";
+import AppModal from "@/components/pages/AppManagement/AppModal";
 
 export default function AppManagement() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [searchValue, setSearchValue] = useState("");
-	const [activeStatus, setActiveStatus] = useState("");
 	const [userStatus, setUserStatus] = useState("");
 	const [users, setUsers] = useState([]);
 	const [filteredUsers, setFilteredUsers] = useState([]);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [viewData, setViewData] = useState(null);
 	// 權限
 	const pathname = usePathname();
 	const { routes } = useAuthStore();
@@ -44,19 +43,22 @@ export default function AppManagement() {
 			setIsLoading(false);
 		}
 	};
+	// 打開Modal
+	const handleOpenModal = (user) => {
+		setIsModalOpen(true);
+		setViewData(user);
+	};
+	// 關閉Modal關閉Modal
+	const handleCloseModal = (user) => {
+		setIsModalOpen(false);
+		setViewData(null);
+	};
 	// 搜尋
 	const handleSearch = () => {
 		const keyword = searchValue.toLowerCase();
 		const results = users.filter(user => {
 			const matchKeyword = user.account.toLowerCase().includes(keyword);
-
-			const matchActiveStatus =
-				activeStatus === "" ||
-				(activeStatus === "啟用" && user.status) ||
-				(activeStatus === "停用" && !user.status);
-
 			const matchUserStatus = userStatus === "" || user.remark === userStatus;
-
 			return matchKeyword && matchActiveStatus && matchUserStatus;
 		});
 		setFilteredUsers(results);
@@ -91,14 +93,6 @@ export default function AppManagement() {
 							/>
 						</div>
 						<div className="flex flex-col gap-2 flex-1">
-							<p className="text-gray-900">啟用狀態</p>
-							<Dropdown
-								value={activeStatus}
-								onChange={setActiveStatus}
-								options={["啟用", "停用"]}
-							/>
-						</div>
-						<div className="flex flex-col gap-2 flex-1">
 							<p className="text-gray-900">
 								會員狀態
 							</p>
@@ -126,7 +120,6 @@ export default function AppManagement() {
 									<TheadTr>
 										<Th className="w-[10%]">編號</Th>
 										<Th className="w-[40%]">帳號</Th>
-										<Th className="w-[20%]">註冊日期</Th>
 										<Th className="w-[15%]">狀態</Th>
 										<Th className="w-[15%]">操作</Th>
 									</TheadTr>
@@ -136,16 +129,15 @@ export default function AppManagement() {
 										<TbodyTr key={user.userId}>
 											<Td>{index + 1}</Td>
 											<Td>{user.account}</Td>
-											<Td>{formatDate(user.createTime)}</Td>
 											<Td>
 												{user.remark}
 											</Td>
 											<Td>
 												<IconButton
 													type="button"
-													title="編輯"
-													style="edit"
-													onClick={() => openEditModal(admin)}
+													title="檢視會員資料"
+													style="view"
+													onClick={() => handleOpenModal(user)}
 													disabled={readMode}
 												/>
 											</Td>
@@ -159,6 +151,7 @@ export default function AppManagement() {
 					</div>
 				</div>
 			</PageLayout>
+			<AppModal isOpen={isModalOpen} data={viewData} onClose={handleCloseModal}/>
 		</>
 	);
 }

@@ -36,16 +36,14 @@ export default function AdminManagement() {
 				throw new Error(result.message || "發生未知錯誤");
 			}
 			console.log(result);
-			if (result.success) {
-				setAdmins(result.data.Admins);
-				setFilteredAdmins(result.data.Admins);
+			if (result.ResultCode === 0) {
+				setAdmins(result.Admins);
+				setFilteredAdmins(result.Admins);
 			} else {
 				throw new Error(result.message || "資料取得失敗");
 			}
 		} catch (error) {
-			const ppp = await error;
-			console.log(ppp);
-			// console.error(error.message);
+			console.error(error.message);
 		} finally {
 			setIsLoading(false);
 		}

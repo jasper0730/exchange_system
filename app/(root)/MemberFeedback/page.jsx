@@ -4,6 +4,8 @@ import { PageLayout, PageTitle } from "@/components/ui";
 import { Button, Dropdown, IconButton, SearchBar } from "@/components/common";
 import FeedbackModal from "@/components/pages/MemberFeedback/FeedbackModal";
 import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
+import { useAuthStore } from "@/store";
+import { usePathname } from "next/navigation";
 
 const feedbackTypes = ["問題回報", "建議"];
 
@@ -21,6 +23,7 @@ export default function MemberFeedback() {
 	const [feedbacks, setFeedbacks] = useState(dummyFeedbacks);
 	const [filteredFeedbacks, setFilteredFeedbacks] = useState(dummyFeedbacks);
 	// 權限
+	const pathname = usePathname()
 	const { routes } = useAuthStore();
 	const segments = pathname.split("/").filter(Boolean);
 	const pageKey = segments[0];

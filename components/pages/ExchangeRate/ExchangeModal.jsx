@@ -19,7 +19,7 @@ export default function ExchangeModal({ data, isOpen, onClose, onSubmit }) {
       <div
         className="p-10 max-w-[500px] w-full rounded-lg shadow-lg bg-white relative"
         onClick={(e) => e.stopPropagation()}>
-        <CloseButton onClose={onClose} />
+        <CloseButton onClick={onClose} />
         <h2 className="text-2xl font-bold mb-10 text-gray-900 text-center">參數設定</h2>
         <div className="space-y-5">
           <div className="flex items-center gap-2">
