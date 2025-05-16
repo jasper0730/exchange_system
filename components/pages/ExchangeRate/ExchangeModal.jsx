@@ -46,12 +46,16 @@ export default function ExchangeModal({ data, isOpen, onClose, onSubmit }) {
               onChange={(e) => setRateCount(e.target.value)}
             />
           </div>
+          <div className="flex items-center gap-2">
+            <p className="whitespace-nowrap w-1/2">
+              參數異動：
+            </p>
+            <div className="flex gap-2">
+              <span className="font-bold">0.00223</span>→
+              <span className="text-red-500 font-bold">0.00225</span>
+            </div>
+          </div>
         </div>
-        <p className="mb-2">
-          匯率變更：{current.ExchangeRateMargin} →
-          <span className="text-red-500 font-bold">{rateCount}</span>
-        </p>
-
         <div className="flex justify-center gap-4 mt-10">
           <Button
             type="button"
@@ -65,7 +69,7 @@ export default function ExchangeModal({ data, isOpen, onClose, onSubmit }) {
             onClick={handleSave}
           // disabled={isValid}
           >
-            儲存
+            送出
           </Button>
         </div>
       </div>
