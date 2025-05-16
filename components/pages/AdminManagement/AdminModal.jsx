@@ -41,7 +41,7 @@ export default function AdminModal({ data, isOpen, onClose, onSubmit, mode }) {
       <div
         className="p-10 max-w-[700px] w-full rounded-lg shadow-lg bg-white relative"
         onClick={(e) => e.stopPropagation()}>
-        <CloseButton onClick={onClose}/>
+        <CloseButton onClick={onClose} />
         <h2 className="text-2xl font-bold mb-10 text-gray-900">{mode === "create" ? "新增" : "編輯"}使用者</h2>
         <div className="space-y-5">
           <div>

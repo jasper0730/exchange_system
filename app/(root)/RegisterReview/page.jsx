@@ -4,14 +4,22 @@ import { Loader, PageLayout, PageTitle } from "@/components/ui";
 import { FiExternalLink } from "react-icons/fi";
 import { formatDate } from "@/utils/format";
 import Link from "next/link";
-import { Button, SearchBar } from "@/components/common";
+import { Button, IconButton, SearchBar } from "@/components/common";
+import { usePathname } from "next/navigation";
+import { useAuthStore } from "@/store";
 
 export default function RegisterReview() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [searchValue, setSearchValue] = useState("");
 	const [users, setUsers] = useState([]);
 	const [filteredUsers, setFilteredUsers] = useState([]);
-
+	// 權限
+	const pathname = usePathname();
+	const { routes } = useAuthStore();
+	const segments = pathname.split("/").filter(Boolean);
+	const pageKey = segments[0];
+	const current = routes?.[pageKey];
+	const readMode = current === "readonly";
 	// 取得案件審核資料
 	const fetchData = async () => {
 		try {
@@ -90,7 +98,12 @@ export default function RegisterReview() {
 										<td className="px-4 py-2">{formatDate(user.sentTime)}</td>
 										<td className="px-4 py-2">
 											<Link href={`/RegisterReview/${user.id}`}>
-												<FiExternalLink size={18} />
+												<IconButton
+													type="button"
+													style="view"
+													title="檢視案件"
+													disabled={readMode}
+												/>
 											</Link>
 										</td>
 									</tr>

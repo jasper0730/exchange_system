@@ -36,15 +36,15 @@ export default function RegisterReviewDetail() {
           </div>
         </div>
         <div className="mt-5">
-          <h2 className="text-xl font-semibold">上傳文件</h2>
+          <h2 className="text-xl font-bold">上傳文件</h2>
           <img src="111/" alt="身分證明文件" className="rounded border mt-3" />
         </div>
         <div className="mt-5">
-          <h2 className="text-xl font-semibold">KYC 驗證狀態</h2>
+          <h2 className="text-xl font-bold">KYC 驗證狀態</h2>
           <p className="text-gray-700 mt-3">註冊待審</p>
         </div>
         <div className="mt-5">
-          <h2 className="text-xl font-semibold">審核結果</h2>
+          <h2 className="text-xl font-bold">審核結果</h2>
           <div className="flex gap-4 mt-3">
             {["通過", "拒絕", "補件"].map(option => (
               <div key={option} className="flex items-center gap-1">
@@ -60,7 +60,7 @@ export default function RegisterReviewDetail() {
           </div>
         </div>
         <div className="mt-5">
-          <p className="text-xl font-semibold mb-2">備註</p>
+          <p className="text-xl font-bold mb-2">備註</p>
           <Textarea
             rows="4"
             placeholder="請輸入備註說明..."

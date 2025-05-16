@@ -1,0 +1,59 @@
+# Summary
+
+Date : 2025-05-16 18:01:35
+
+Directory d:\\Intersense\\exchange_system\\app
+
+Total : 34 files,  2295 codes, 74 comments, 183 blanks, all 2552 lines
+
+Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
+
+## Languages
+| language | files | code | comment | blank | total |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| JavaScript JSX | 22 | 2,022 | 57 | 138 | 2,217 |
+| JavaScript | 11 | 272 | 17 | 44 | 333 |
+| CSS | 1 | 1 | 0 | 1 | 2 |
+
+## Directories
+| path | files | code | comment | blank | total |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| (root) | 16 | 1,645 | 52 | 106 | 1,803 |
+| (root) (Files) | 2 | 73 | 0 | 5 | 78 |
+| (root)\\AdminManagement | 1 | 235 | 12 | 12 | 259 |
+| (root)\\AppManagement | 1 | 153 | 4 | 7 | 164 |
+| (root)\\ExchangeMonitor | 1 | 140 | 4 | 10 | 154 |
+| (root)\\ExchangeRate | 2 | 113 | 1 | 6 | 120 |
+| (root)\\ExchangeRate (Files) | 1 | 108 | 1 | 5 | 114 |
+| (root)\\ExchangeRate\\ExchangeReview | 1 | 5 | 0 | 1 | 6 |
+| (root)\\MemberFeedback | 1 | 112 | 6 | 7 | 125 |
+| (root)\\NotificationSettings | 1 | 96 | 5 | 8 | 109 |
+| (root)\\OperationLog | 1 | 129 | 2 | 13 | 144 |
+| (root)\\PermissionManagement | 1 | 176 | 8 | 12 | 196 |
+| (root)\\RegisterReview | 2 | 190 | 4 | 9 | 203 |
+| (root)\\RegisterReview (Files) | 1 | 110 | 4 | 4 | 118 |
+| (root)\\RegisterReview\\[id] | 1 | 80 | 0 | 5 | 85 |
+| (root)\\ReportManagement | 1 | 120 | 4 | 10 | 134 |
+| (root)\\RiskNotes | 1 | 8 | 0 | 2 | 10 |
+| (root)\\UploadInfo | 1 | 100 | 2 | 5 | 107 |
+| . | 34 | 2,295 | 74 | 183 | 2,552 |
+| . (Files) | 4 | 69 | 0 | 12 | 81 |
+| api | 11 | 272 | 17 | 44 | 333 |
+| api\\admin | 2 | 44 | 4 | 12 | 60 |
+| api\\admin (Files) | 1 | 37 | 2 | 11 | 50 |
+| api\\admin\\[id] | 1 | 7 | 2 | 1 | 10 |
+| api\\exchange | 1 | 39 | 0 | 3 | 42 |
+| api\\groups | 2 | 42 | 5 | 4 | 51 |
+| api\\groups (Files) | 1 | 35 | 4 | 2 | 41 |
+| api\\groups\\[id] | 1 | 7 | 1 | 2 | 10 |
+| api\\login | 1 | 46 | 1 | 10 | 57 |
+| api\\logout | 1 | 19 | 1 | 4 | 24 |
+| api\\rate | 1 | 15 | 0 | 4 | 19 |
+| api\\review | 1 | 16 | 2 | 1 | 19 |
+| api\\role | 1 | 27 | 2 | 2 | 31 |
+| api\\user | 1 | 24 | 2 | 4 | 30 |
+| forgot-password | 1 | 168 | 5 | 8 | 181 |
+| login | 1 | 122 | 0 | 9 | 131 |
+| unauthorized | 1 | 19 | 0 | 4 | 23 |
+
+Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)

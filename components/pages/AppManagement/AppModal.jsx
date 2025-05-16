@@ -17,7 +17,7 @@ export default function AppModal({ data, isOpen, onClose, onSubmit }) {
       <div
         className="p-10 max-w-[700px] w-full rounded-lg shadow-lg bg-white relative"
         onClick={(e) => e.stopPropagation()}>
-        <CloseButton onClose={onClose}/>
+        <CloseButton onClose={onClose} />
         <h2 className="text-2xl font-bold mb-10 text-gray-900">會員</h2>
         <div className="space-y-5">
           <div>

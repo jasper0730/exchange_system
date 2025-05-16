@@ -9,7 +9,7 @@ export async function GET() {
 
     if (!response.ok) {
       return NextResponse.json(
-        { message: "後端API錯誤" },
+        { message: "HTTP 錯誤" },
         { status: response.status }
       );
     }

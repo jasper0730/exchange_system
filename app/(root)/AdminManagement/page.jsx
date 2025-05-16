@@ -1,18 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Loader, PageLayout, PageTitle } from "@/components/ui";
-import { FaEdit, FaTrash } from "react-icons/fa";
 import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { AdminModal } from "@/components/pages/AdminManagement";
 import Swal from "sweetalert2";
 import { useAuthStore } from "@/store";
 import { usePathname } from "next/navigation";
-import { Button, Dropdown, SearchBar } from "@/components/common";
+import { Button, Dropdown, IconButton, SearchBar } from "@/components/common";
 import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
 
 
 export default function AdminManagement() {
-	const pathname = usePathname();
 	const [isLoading, setIsLoading] = useState(true);
 	const [admins, setAdmins] = useState([]);
 	const [searchValue, setSearchValue] = useState("");
@@ -21,16 +19,13 @@ export default function AdminManagement() {
 	const [modalMode, setModalMode] = useState("create");
 	const [editAdmin, setEditAdmin] = useState(null);
 	const [filteredAdmins, setFilteredAdmins] = useState([]);
-	const { routes } = useAuthStore();
 	// 權限
+	const pathname = usePathname();
+	const { routes } = useAuthStore();
 	const segments = pathname.split("/").filter(Boolean);
 	const pageKey = segments[0];
 	const current = routes?.[pageKey];
 	const readMode = current === "readonly";
-	const enableMode = current === "enable";
-
-	console.log("enableMode", enableMode);
-	console.log("readMode", readMode);
 
 	// 取的所有後台使用這資料
 	const fetchData = async () => {
@@ -38,17 +33,19 @@ export default function AdminManagement() {
 			const response = await fetch("/api/admin");
 			const result = await response.json();
 			if (!response.ok) {
-				throw new Error(result.message || "API錯誤");
+				throw new Error(result.message || "發生未知錯誤");
 			}
-
-			if (result.ResultCode === 0) {
-				setAdmins(result.Admins);
-				setFilteredAdmins(result.Admins);
+			console.log(result);
+			if (result.success) {
+				setAdmins(result.data.Admins);
+				setFilteredAdmins(result.data.Admins);
 			} else {
 				throw new Error(result.message || "資料取得失敗");
 			}
 		} catch (error) {
-			console.error(error.message);
+			const ppp = await error;
+			console.log(ppp);
+			// console.error(error.message);
 		} finally {
 			setIsLoading(false);
 		}
@@ -75,7 +72,7 @@ export default function AdminManagement() {
 	};
 	// 建立 or 編輯
 	const handleSubmit = async (payload) => {
-		console.log(payload)
+		console.log(payload);
 		try {
 			setIsLoading(true);
 			const apiUrl = modalMode === "create" ? "/api/admin" : `/api/admin/${editAdmin.id}`;
@@ -188,6 +185,7 @@ export default function AdminManagement() {
 					<div className="mt-5 flex justify-end">
 						<Button
 							onClick={openCreateModal}
+							disabled={readMode}
 						>
 							新增
 						</Button>
@@ -224,22 +222,20 @@ export default function AdminManagement() {
 												</button>
 											</Td>
 											<Td className="flex items-center gap-4">
-												<button
+												<IconButton
 													type="button"
 													title="編輯"
-													className="text-gray-500 hover:text-gray-900 p-1 rounded transition-colors cursor-pointer"
+													style="edit"
 													onClick={() => openEditModal(admin)}
-												>
-													<FaEdit size={18} />
-												</button>
-												<button
+													disabled={readMode}
+												/>
+												<IconButton
 													type="button"
 													title="刪除"
-													className="text-gray-500 hover:text-red-600 p-1 rounded transition-colors cursor-pointer"
+													style="delete"
 													onClick={() => handleDelete(admin.Id)}
-												>
-													<FaTrash size={18} />
-												</button>
+													disabled={readMode}
+												/>
 											</Td>
 										</TbodyTr>
 									))

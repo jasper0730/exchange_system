@@ -125,18 +125,18 @@ export default function ExchangeMonitor() {
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
 				<div className="bg-white p-6 rounded shadow border border-gray-200">
-					<h2 className="text-xl font-semibold mb-4">交易狀態統計</h2>
+					<h2 className="text-xl font-bold mb-4">交易狀態統計</h2>
 					<div className="flex items-center h-full">
 						<Bar data={barData} />
 					</div>
 				</div>
 				<div className="bg-white p-6 rounded shadow border border-gray-200">
-					<h2 className="text-xl font-semibold mb-4">幣別交易金額占比</h2>
+					<h2 className="text-xl font-bold mb-4">幣別交易金額占比</h2>
 					<Doughnut data={doughnutData} />
 				</div>
 			</div>
 			<div className="bg-white p-6 rounded shadow border border-gray-200 mt-10">
-				<h2 className="text-xl font-semibold mb-4">資金水位預警</h2>
+				<h2 className="text-xl font-bold mb-4">資金水位預警</h2>
 				<div className="w-full bg-gray-200 h-4 rounded">
 					<div
 						className={`h-4 rounded ${stats?.fundLevel >= 90 ? "bg-red-500" : stats?.fundLevel >= 85 ? "bg-yellow-500" : "bg-green-500"

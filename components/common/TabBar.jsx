@@ -2,7 +2,7 @@
 export function TabButton({ children, isActive, className, ...props }) {
   return (
     <button
-      className={`px-4 py-2 font-semibold cursor-pointer ${isActive
+      className={`px-4 py-2 font-bold cursor-pointer ${isActive
         ? "border-b-2 border-gray-900 text-gray-900"
         : "text-gray-500"
         } ${className}`}

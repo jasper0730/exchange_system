@@ -108,7 +108,7 @@ export default function SideMenu() {
                   <span className={`inline-flex items-center ${sideMenuCollapsed ? "" : "gap-2"}`}>
                     <span className="text-lg">{item.icon}</span>
                     <span
-                      className={`transition duration-[0,0] ${sideMenuCollapsed ? "opacity-0" : "opacity-100 delay-150"}`}
+                      className={`transition duration-[0,0] truncate ${sideMenuCollapsed ? "opacity-0" : "opacity-100 delay-150"}`}
                     >
                       {!sideMenuCollapsed && item.label}
                     </span>
@@ -131,7 +131,7 @@ export default function SideMenu() {
                     <>
                       <span className="text-lg"><FiLogOut /></span>
                       <span
-                        className={`transition duration-[0,0] ${sideMenuCollapsed ? "opacity-0" : "opacity-100 delay-150"}`}
+                        className={`transition duration-[0,0] truncate ${sideMenuCollapsed ? "opacity-0" : "opacity-100 delay-150"}`}
                       >
                         {!sideMenuCollapsed && "登出"}
                       </span>

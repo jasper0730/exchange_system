@@ -1,8 +1,7 @@
 "use client";
 import { useState } from "react";
 import { PageLayout, PageTitle } from "@/components/ui";
-import { Button, Dropdown, SearchBar } from "@/components/common";
-import { FiEye } from "react-icons/fi";
+import { Button, Dropdown, IconButton, SearchBar } from "@/components/common";
 import FeedbackModal from "@/components/pages/MemberFeedback/FeedbackModal";
 import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
 
@@ -21,6 +20,12 @@ export default function MemberFeedback() {
 	const [selectedFeedback, setSelectedFeedback] = useState(null);
 	const [feedbacks, setFeedbacks] = useState(dummyFeedbacks);
 	const [filteredFeedbacks, setFilteredFeedbacks] = useState(dummyFeedbacks);
+	// 權限
+	const { routes } = useAuthStore();
+	const segments = pathname.split("/").filter(Boolean);
+	const pageKey = segments[0];
+	const current = routes?.[pageKey];
+	const readMode = current === "readonly";
 	// 送出
 	const handleSubmit = (payload) => {
 		console.log('送出', payload);
@@ -96,13 +101,13 @@ export default function MemberFeedback() {
 									<Td>{feedback.type}</Td>
 									<Td>{feedback.time}</Td>
 									<Td>
-										<button
+										<IconButton
+											type="button"
 											onClick={() => openModal(feedback)}
-											className="text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
 											title="檢視詳細內容"
-										>
-											<FiEye size={20} />
-										</button>
+											style="view"
+											disabled={readMode}
+										/>
 									</Td>
 								</TbodyTr>
 							))
