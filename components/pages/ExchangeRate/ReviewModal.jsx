@@ -9,7 +9,7 @@ export default function ReviewModal({ data, isOpen, onClose, onSubmit }) {
     // onSubmit({ reviewResult, remark });
     setReviewResult("");
     setRemark("");
-    onClose()
+    onClose();
   };
   if (!isOpen) return null;
 
@@ -19,7 +19,7 @@ export default function ReviewModal({ data, isOpen, onClose, onSubmit }) {
         className="p-10 max-w-[700px] w-full rounded-lg shadow-lg bg-white relative"
         onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={onClose} />
-        <h2 className="text-2xl font-bold mb-10 text-center">匯率審核詳情</h2>
+        <h2 className="text-2xl font-bold mb-10 text-center">參數審核詳情</h2>
         <div className="space-y-5">
           <div className="flex items-center gap-2">
             <p className="whitespace-nowrap w-1/2">
@@ -27,6 +27,14 @@ export default function ReviewModal({ data, isOpen, onClose, onSubmit }) {
             </p>
             <p className="w-1/2">
               david65497
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <p className="whitespace-nowrap w-1/2">
+              貨幣對：
+            </p>
+            <p className="w-1/2">
+              IND
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -40,20 +48,11 @@ export default function ReviewModal({ data, isOpen, onClose, onSubmit }) {
           </div>
           <div className="flex items-center gap-2">
             <p className="whitespace-nowrap w-1/2">
-              貨幣對：
-            </p>
-            <p className="w-1/2">
-              IND
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <p className="whitespace-nowrap w-1/2">
-              審核結果
+              審核結果：
             </p>
             {["通過", "駁回"].map((option) => (
               <div key={option} className="flex gap-2 items-center">
                 <Radio
-                  name="reviewResult"
                   value={option}
                   checked={reviewResult === option}
                   onChange={(e) => setReviewResult(e.target.value)}
