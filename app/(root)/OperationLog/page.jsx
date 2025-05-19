@@ -71,7 +71,16 @@ export default function OperationLog() {
 	};
 
 	useEffect(() => {
-		fetchData();
+		// fetchData();
+		// 假資料
+		const mockData = [
+			{ id: 1, user: "Alice", time: "2025-05-19 10:00", action: "新增匯率", details: "新增 USD 匯率 1:32.5" },
+			{ id: 2, user: "Bob", time: "2025-05-19 11:30", action: "修改匯率", details: "調整 EUR 匯率從 1:35 改為 1:34.8" },
+			{ id: 3, user: "Charlie", time: "2025-05-19 12:15", action: "刪除匯率", details: "刪除 JPY 匯率設定" },
+		];
+
+		setLogs(mockData);
+		setFilteredLogs(mockData);
 	}, []);
 
 	if (isLoading) return <Loader fullScreen />;

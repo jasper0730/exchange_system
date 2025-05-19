@@ -30,12 +30,12 @@ export default function NotificationSettings() {
 	};
 	// 清空
 	const handleClear = () => {
-		setType(variableOptions[0])
+		setType(variableOptions[0]);
 		setTitle("");
 		setContent("");
 	};
 	// 儲存
-	const handleSave = () => {
+	const handleSubmit = () => {
 		Swal.fire({
 			icon: "success",
 			title: "儲存成功",
@@ -94,7 +94,7 @@ export default function NotificationSettings() {
 				</div>
 				<div className="flex gap-4 mt-20 justify-center">
 					<Button onClick={handlePreview}>預覽</Button>
-					<Button onClick={handleSave}>
+					<Button onClick={handleSubmit}>
 						儲存
 					</Button>
 					<Button onClick={handleClear} style="clear">

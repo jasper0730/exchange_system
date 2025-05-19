@@ -1,11 +1,14 @@
 "use client";
 import { Button, Radio, Textarea } from "@/components/common";
-import { PageLayout, PageTitle } from "@/components/ui";
+import { Loader, PageLayout, PageTitle } from "@/components/ui";
 import { useAuthStore } from "@/store";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function ReviewDetail() {
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false);
   const [reviewStatus, setReviewStatus] = useState({});
   const [remark, setRemark] = useState("");
   const [history, setHistory] = useState(["2025/03/24 提出註冊申請", "2025/03/25 資料補件"]);
@@ -33,10 +36,12 @@ export default function ReviewDetail() {
     console.log(reviewStatus, remark);
   };
 
+  if (isLoading) return <Loader fullScreen />;
+
   return (
     <PageLayout>
       <PageTitle title="會員審核詳情" />
-      <div className="flex justify-between items-start bg-white p-6 rounded shadow border border-gray-200 mb-6">
+      <div className="mt-10 flex justify-between items-start bg-white p-6 rounded shadow border border-gray-200 mb-6">
         <div className="space-y-2">
           <h2 className="text-2xl font-bold">張先生</h2>
           <p className="text-gray-700 mt-2">
@@ -46,7 +51,7 @@ export default function ReviewDetail() {
             權限狀態：<span className="font-bold text-green-500">一般會員</span>
           </p>
         </div>
-        <div className="w-1/3">
+        <div className="w-1/2">
           <h3 className="text-lg font-bold mb-2">備註紀錄</h3>
           <div className="max-h-[200px] overflow-y-auto border p-3 rounded bg-gray-50">
             <ul className="text-gray-700 list-disc pl-5 space-y-1">
@@ -121,7 +126,7 @@ export default function ReviewDetail() {
           onChange={(e) => setRemark(e.target.value)}
         />
         <div className="flex gap-4 justify-center mt-4">
-          <Button style="clear">取消</Button>
+          <Button style="clear" onClick={() => router.back()}>返回</Button>
           <Button onClick={handleSubmit}>送出</Button>
         </div>
       </div>

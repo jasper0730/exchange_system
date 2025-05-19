@@ -27,7 +27,7 @@ export default function PermissionModal({ data, isOpen, onClose, onSubmit, mode 
     setPermissions((prev) => ({ ...prev, [feature]: value }));
   };
 
-  const handleSave = () => {
+  const handleSubmit = () => {
     if (isValid) return;
     onSubmit({ groupName, permissions });
     setGroupName("");
@@ -95,7 +95,7 @@ export default function PermissionModal({ data, isOpen, onClose, onSubmit, mode 
           </button>
           <button
             type="button"
-            onClick={handleSave}
+            onClick={handleSubmit}
             className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-900 cursor-pointer disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-default transition-colors"
             disabled={isValid}
           >

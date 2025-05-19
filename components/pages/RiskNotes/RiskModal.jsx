@@ -6,7 +6,7 @@ const riskOptions = ["會員註冊時提供之身分證明等相關文件疑似�
 export default function RiskModal({ data, isOpen, onClose, onSubmit }) {
   const [userStatus, setUserStatus] = useState("");
   const isValid = userStatus !== "";
-  const handleSave = () => {
+  const handleSubmit = () => {
     console.log("儲存資料：");
     onClose();
     // onSubmit();
@@ -64,7 +64,7 @@ export default function RiskModal({ data, isOpen, onClose, onSubmit }) {
             取消
           </Button>
           <Button
-            onClick={handleSave}
+            onClick={handleSubmit}
             disabled={!isValid}
           >
             儲存

@@ -27,7 +27,7 @@ export default function AdminModal({ data, isOpen, onClose, onSubmit, mode }) {
 
   const isValid = Account?.trim() === "" || Email?.trim() === "";
 
-  const handleSave = () => {
+  const handleSubmit = () => {
     if (isValid) return;
     onSubmit({
       Account, Email, Status, Role
@@ -96,7 +96,7 @@ export default function AdminModal({ data, isOpen, onClose, onSubmit, mode }) {
             取消
           </Button>
           <Button
-            onClick={handleSave}
+            onClick={handleSubmit}
             disabled={isValid}
           >
             儲存

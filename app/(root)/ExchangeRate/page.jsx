@@ -18,8 +18,10 @@ export default function ExchangeRate() {
         throw new Error(response.statusText || "HTTP 錯誤");
       }
       const result = await response.json();
-      if (result.success) {
-        setData(result.data);
+      if (result.ResultCode === 0) {
+        setData(result);
+      } else {
+        throw new Error(result.message || "資料取得失敗");
       }
     } catch (error) {
       console.error(error);
@@ -37,7 +39,7 @@ export default function ExchangeRate() {
     }));
   };
 
-  const handleSave = () => {
+  const handleSubmit = () => {
     // TODO: API 更新
     Swal.fire({
       icon: "success",
@@ -74,12 +76,12 @@ export default function ExchangeRate() {
         <div className="mt-5 space-y-5">
           <div className="bg-white p-6 rounded shadow border border-gray-200">
             <h2 className="text-lg font-bold mb-4">台幣(TWD)</h2>
-            <p className="text-gray-700">基準對美元匯率：{data.TwdToUsdRate}</p>
+            <p className="text-gray-700">基準對美元匯率：{data?.TwdToUsdRate}</p>
             <div className="text-gray-500 text-sm mt-2 flex justify-end">
-              <p>生效時間：{data.EffectiveTime}</p>
+              <p>生效時間：{data?.EffectiveTime}</p>
             </div>
           </div>
-          {data.CountryList && data.CountryList.map((item) => (
+          {data?.CountryList && data?.CountryList.map((item) => (
             <div key={item.CountryId} className="bg-white p-6 rounded shadow border border-gray-200">
               <h3 className="text-lg font-bold mb-4">
                 {item.CountryName} ({item.CurrencyCode})
@@ -96,8 +98,11 @@ export default function ExchangeRate() {
                     {calculateFinalRate(item.ExchangeRate, item.ExchangeRateMargin)}
                   </span>
                 </p>
+                <p className="text-gray-700 mt-2">
+                  手續費：<span className="font-bold">{item.Fee ?? "無"}</span>
+                </p>
                 <div className="text-gray-500 text-sm mt-2 flex justify-end">
-                  <p>生效時間：{data.EffectiveTime}</p>
+                  <p>生效時間：{data?.EffectiveTime}</p>
                 </div>
               </div>
             </div>
@@ -105,7 +110,7 @@ export default function ExchangeRate() {
         </div>
       </PageLayout>
       <ExchangeModal
-        data={data.CountryList}
+        data={data}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />

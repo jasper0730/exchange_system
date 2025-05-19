@@ -28,7 +28,7 @@ export default function AppManagement() {
 			const response = await fetch("/api/user");
 			const result = await response.json();
 			if (!response.ok) {
-				throw new Error(result.message || "API錯誤");
+				throw new Error(result.message || "Http 錯誤");
 			}
 
 			if (result.ResultCode === 0) {
@@ -66,7 +66,6 @@ export default function AppManagement() {
 	// 清空
 	const handleClear = () => {
 		setSearchValue("");
-		setActiveStatus("");
 		setUserStatus("");
 	};
 
@@ -151,7 +150,7 @@ export default function AppManagement() {
 					</div>
 				</div>
 			</PageLayout>
-			<AppModal isOpen={isModalOpen} data={viewData} onClose={handleCloseModal}/>
+			<AppModal isOpen={isModalOpen} data={viewData} onClose={handleCloseModal} />
 		</>
 	);
 }

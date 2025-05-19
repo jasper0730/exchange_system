@@ -37,7 +37,7 @@ export async function POST(request) {
 
     if (!addResponse.ok) {
       return NextResponse.json(
-        { message: addResult.message || "API錯誤" },
+        { message: addResult.message || "Http 錯誤" },
         { status: addResponse.status }
       );
     }

@@ -28,7 +28,7 @@ export default function RiskNotes() {
 			const response = await fetch("/api/user");
 			const result = await response.json();
 			if (!response.ok) {
-				throw new Error(result.message || "API錯誤");
+				throw new Error(result.message || "Http 錯誤");
 			}
 
 			if (result.ResultCode === 0) {
@@ -143,7 +143,7 @@ export default function RiskNotes() {
 					</div>
 				</div>
 			</PageLayout>
-			<RiskModal isOpen={isModalOpen} data={viewData} onClose={handleCloseModal}/>
+			<RiskModal isOpen={isModalOpen} data={viewData} onClose={handleCloseModal} />
 		</>
 	);
 }

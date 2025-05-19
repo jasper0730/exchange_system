@@ -43,7 +43,7 @@ export default function UploadInfo() {
 
 	return (
 		<PageLayout>
-			<PageTitle title="仲介公司文件上傳與審核" />
+			<PageTitle title="文件上傳" />
 			<div
 				className="mt-10 border-2 border-dashed border-gray-300 p-10 rounded-lg text-center bg-gray-50"
 				onDragOver={(e) => e.preventDefault()}

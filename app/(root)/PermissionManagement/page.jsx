@@ -33,7 +33,7 @@ export default function PermissionManagement() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(response.message || "API錯誤");
+        throw new Error(response.message || "Http 錯誤");
       }
 
       if (result.ResultCode === 0) {
@@ -78,7 +78,7 @@ export default function PermissionManagement() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || "API錯誤");
+        throw new Error(result.message || "Http 錯誤");
       }
       if (result.ResultCode === 0) {
         fetchData();

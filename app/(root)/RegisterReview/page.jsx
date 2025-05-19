@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Loader, PageLayout, PageTitle } from "@/components/ui";
-import { FiExternalLink } from "react-icons/fi";
 import { formatDate } from "@/utils/format";
 import Link from "next/link";
 import { Button, IconButton, SearchBar } from "@/components/common";
@@ -26,7 +25,7 @@ export default function RegisterReview() {
 			const response = await fetch("/api/review");
 			const result = await response.json();
 			if (!response.ok) {
-				throw new Error(result.message || "API錯誤");
+				throw new Error(result.message || "Http 錯誤");
 			}
 
 			if (result.ResultCode === 0) {

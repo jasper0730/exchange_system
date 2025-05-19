@@ -6,7 +6,7 @@ const roleOptions = ["正常", "未生效", "註冊待審", "補件待審", "審
 export default function AppModal({ data, isOpen, onClose, onSubmit }) {
   const [userStatus, setUserStatus] = useState("");
   const isValid = userStatus !== "";
-  const handleSave = () => {
+  const handleSubmit = () => {
     console.log("儲存資料：");
     onClose();
     // onSubmit();
@@ -59,7 +59,7 @@ export default function AppModal({ data, isOpen, onClose, onSubmit }) {
             取消
           </Button>
           <Button
-            onClick={handleSave}
+            onClick={handleSubmit}
             disabled={!isValid}
           >
             儲存

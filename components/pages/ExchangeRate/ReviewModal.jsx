@@ -5,7 +5,7 @@ export default function ReviewModal({ data, isOpen, onClose, onSubmit }) {
   const [reviewResult, setReviewResult] = useState("");
   const [remark, setRemark] = useState("");
   const isValid = reviewResult !== "";
-  const handleSave = () => {
+  const handleSubmit = () => {
     // onSubmit({ reviewResult, remark });
     setReviewResult("");
     setRemark("");
@@ -16,7 +16,7 @@ export default function ReviewModal({ data, isOpen, onClose, onSubmit }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div
-        className="p-10 max-w-[700px] w-full rounded-lg shadow-lg bg-white relative"
+        className="p-10 max-w-[500px] w-full rounded-lg shadow-lg bg-white relative"
         onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={onClose} />
         <h2 className="text-2xl font-bold mb-10 text-center">參數審核詳情</h2>
@@ -81,7 +81,7 @@ export default function ReviewModal({ data, isOpen, onClose, onSubmit }) {
           </Button>
           <Button
             disabled={!isValid}
-            onClick={handleSave}
+            onClick={handleSubmit}
           >
             儲存
           </Button>
