@@ -1,13 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
-import { FaEdit } from "react-icons/fa";
+import { usePathname } from "next/navigation";
 import { Loader, PageLayout, PageTitle } from "@/components/ui";
 import { PermissionModal } from "@/components/pages/PermissionManagement";
 import Swal from "sweetalert2";
-import { Button, SearchBar } from "@/components/common";
+import { Button, IconButton, SearchBar } from "@/components/common";
 import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
+import { useAuthStore } from "@/store";
 
 export default function PermissionManagement() {
+
   const [isLoading, setIsLoading] = useState(true);
   const [groups, setGroups] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,6 +17,14 @@ export default function PermissionManagement() {
   const [editGroup, setEditGroup] = useState(null);
   const [searchValue, setSearchValue] = useState("");
   const [filteredGroups, setFilteredGroups] = useState([]);
+  // 權限
+  const pathname = usePathname();
+  const { routes } = useAuthStore();
+  const segments = pathname.split("/").filter(Boolean);
+  const pageKey = segments[0];
+  const current = routes?.[pageKey];
+  const readMode = current === "readonly";
+
   // 取得群組資料
   const fetchData = async () => {
     try {
@@ -135,6 +145,7 @@ export default function PermissionManagement() {
           <div className="mt-5 flex justify-end">
             <Button
               onClick={openCreateModal}
+              disabled={readMode}
             >
               新增
             </Button>
@@ -155,10 +166,13 @@ export default function PermissionManagement() {
                       <Td>{idx + 1}</Td>
                       <Td>{group.name}</Td>
                       <Td className="flex gap-4">
-                        <button type="button" title="編輯" className="text-gray-500 hover:text-gray-900 p-1 rounded transition-colors cursor-pointer"
-                          onClick={() => openEditModal(group)}>
-                          <FaEdit size={18} />
-                        </button>
+                        <IconButton
+                          type="button"
+                          title="編輯"
+                          style="edit"
+                          onClick={() => openEditModal(group)}
+                          disabled={readMode}
+                        />
                       </Td>
                     </TbodyTr>
                   ))

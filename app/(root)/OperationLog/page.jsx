@@ -39,7 +39,7 @@ export default function OperationLog() {
 		setSearchValue("");
 	};
 	const handleSearch = () => {
-		const keyword = searchValue.toLowerCase()
+		const keyword = searchValue.toLowerCase();
 		const result = logs.filter((log) =>
 			log.user.toLowerCase().includes(keyword)
 		);

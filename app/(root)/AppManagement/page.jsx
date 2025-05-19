@@ -4,8 +4,10 @@ import { Loader, PageLayout, PageTitle } from "@/components/ui";
 import { MdToggleOff, MdToggleOn } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { formatDate } from "@/utils/format";
-import { Button, Dropdown, SearchBar } from "@/components/common";
+import { Button, Dropdown, IconButton, SearchBar } from "@/components/common";
 import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
+import { usePathname } from "next/navigation";
+import { useAuthStore } from "@/store";
 
 export default function AppManagement() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -14,7 +16,13 @@ export default function AppManagement() {
 	const [userStatus, setUserStatus] = useState("");
 	const [users, setUsers] = useState([]);
 	const [filteredUsers, setFilteredUsers] = useState([]);
-
+	// 權限
+	const pathname = usePathname();
+	const { routes } = useAuthStore();
+	const segments = pathname.split("/").filter(Boolean);
+	const pageKey = segments[0];
+	const current = routes?.[pageKey];
+	const readMode = current === "readonly";
 	// 取得會員資料
 	const fetchData = async () => {
 		try {
@@ -117,10 +125,9 @@ export default function AppManagement() {
 								<Thead>
 									<TheadTr>
 										<Th className="w-[10%]">編號</Th>
-										<Th className="w-[30%]">帳號</Th>
+										<Th className="w-[40%]">帳號</Th>
 										<Th className="w-[20%]">註冊日期</Th>
 										<Th className="w-[15%]">狀態</Th>
-										<Th className="w-[10%]">啟用</Th>
 										<Th className="w-[15%]">操作</Th>
 									</TheadTr>
 								</Thead>
@@ -134,28 +141,13 @@ export default function AppManagement() {
 												{user.remark}
 											</Td>
 											<Td>
-												<button
-													type="button"
-													title={user.status ? "啟用" : "停用"}
-													className="text-gray-500 hover:text-gray-900 p-1 rounded transition-colors cursor-pointer"
-													onClick={() => toggleStatus(user.userId)}
-												>
-													{user.status ? (
-														<MdToggleOn size={30} className="text-green-500" />
-													) : (
-														<MdToggleOff size={30} className="text-gray-400" />
-													)}
-												</button>
-											</Td>
-											<Td>
-												<button
+												<IconButton
 													type="button"
 													title="編輯"
-													className="text-gray-500 hover:text-gray-900 p-1 rounded transition-colors cursor-pointer"
+													style="edit"
 													onClick={() => openEditModal(admin)}
-												>
-													<FaEdit size={18} />
-												</button>
+													disabled={readMode}
+												/>
 											</Td>
 										</TbodyTr>
 									))

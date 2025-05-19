@@ -82,7 +82,7 @@ export default function ForgotPassword() {
             </div>
             <button
               type="button"
-              className={`w-full font-semibold py-2 px-4 rounded transition text-white ${account ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300"
+              className={`w-full font-bold py-2 px-4 rounded transition text-white ${account ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300"
                 }`}
               disabled={!account}
               onClick={handleNext}
@@ -155,9 +155,9 @@ export default function ForgotPassword() {
             </div>
             <button
               type="button"
-              className={`w-full font-semibold py-2 px-4 rounded transition text-white ${otp && password && confirmPassword
-                  ? "bg-blue-500 hover:bg-blue-600"
-                  : "bg-gray-300"
+              className={`w-full font-bold py-2 px-4 rounded transition text-white ${otp && password && confirmPassword
+                ? "bg-blue-500 hover:bg-blue-600"
+                : "bg-gray-300"
                 }`}
               disabled={!(otp && password && confirmPassword)}
               onClick={handleConfirm}

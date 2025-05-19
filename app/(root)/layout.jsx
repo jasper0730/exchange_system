@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
             onClick={() => setMenuOpen(false)}
           >
             <motion.div
-              className="bg-primary w-72 h-full"
+              className="bg-gray-900 w-72 h-full"
               initial={{ x: -300 }}
               animate={{ x: 0 }}
               exit={{ x: -300 }}

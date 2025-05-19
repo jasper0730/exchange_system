@@ -36,13 +36,13 @@ const Login = () => {
       }
 
       if (result.ok) {
+        router.push("/");
         Swal.fire({
           icon: "success",
           title: "登入成功",
           timer: 1500,
           showConfirmButton: false,
         });
-        router.push("/");
       } else {
         throw new Error(result.message);
       }
@@ -104,7 +104,7 @@ const Login = () => {
         </div>
         <button
           type="submit"
-          className={` w-full font-semibold py-2 px-4 rounded transition text-white 
+          className={` w-full font-bold py-2 px-4 rounded transition text-white 
             ${isValid
               ? "bg-blue-500 hover:bg-blue-600 cursor-pointer"
               : "bg-gray-300"
