@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CloseButton, Dropdown, Input, Modal } from "@/components/common";
+import { Button, CloseButton, Dropdown, Input, Modal } from "@/components/common";
 import { MdToggleOn, MdToggleOff } from "react-icons/md";
 
 const roleOptions = ["Admin", "Migrant", "Auditor"]; // 暫時用(需從DB拿
@@ -47,6 +47,7 @@ export default function AdminModal({ data, isOpen, onClose, onSubmit, mode }) {
           <div>
             <p className="text-lg font-bold mb-2">帳號</p>
             <Input
+              className="w-full"
               placeholder="請輸入帳號"
               value={Account ?? ""}
               onChange={(e) => setAccount(e.target.value)}
@@ -55,6 +56,7 @@ export default function AdminModal({ data, isOpen, onClose, onSubmit, mode }) {
           <div>
             <p className="text-lg font-bold mb-2">Email</p>
             <Input
+              className="w-full"
               type="email"
               placeholder="請輸入 Email"
               value={Email ?? ""}
@@ -63,13 +65,11 @@ export default function AdminModal({ data, isOpen, onClose, onSubmit, mode }) {
           </div>
           <div>
             <p className="text-lg font-bold mb-2">權限</p>
-            <div className="relative">
-              <Dropdown
-                value={Role}
-                onChange={setRole}
-                options={roleOptions}
-              />
-            </div>
+            <Dropdown
+              value={Role}
+              onChange={setRole}
+              options={roleOptions}
+            />
           </div>
           <div className="flex items-center justify-between">
             <span className="text-lg font-bold">帳號狀態</span>
@@ -89,21 +89,18 @@ export default function AdminModal({ data, isOpen, onClose, onSubmit, mode }) {
         </div>
 
         <div className="flex justify-center gap-4 mt-10">
-          <button
-            type="button"
+          <Button
+            style="cancel"
             onClick={onClose}
-            className="px-4 py-2 border border-gray-300 text-gray-900 rounded hover:bg-gray-100 cursor-pointer transition-colors"
           >
             取消
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
             onClick={handleSave}
-            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-900 cursor-pointer disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-default transition-colors"
             disabled={isValid}
           >
             儲存
-          </button>
+          </Button>
         </div>
       </div>
     </Modal>
