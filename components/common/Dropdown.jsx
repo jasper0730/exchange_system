@@ -44,14 +44,14 @@ export default function Dropdown({ options = [], value, onChange, placeholder = 
             >
               {defaultText}
             </li>
-
-            :
-            <li
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-500"
-              onClick={() => handleSelect("__EMPTY")}
-            >
-              {placeholder}
-            </li>
+            : placeholder !== null ?
+              <li
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-500"
+                onClick={() => handleSelect("__EMPTY")}
+              >
+                {placeholder}
+              </li>
+              : null
           }
           {options.map((option) => (
             <li

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Loader, PageLayout, PageTitle } from "@/components/ui";
-import { Button, Dropdown, IconButton, SearchBar } from "@/components/common";
+import { Button, Dropdown, IconButton, Pagination, SearchBar, Calender } from "@/components/common";
 import CommonTable, { NoTableData, Table, Tbody, TbodyTr, Td, Th, Thead, TheadTr } from "@/components/ui/CommonTable";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store";
@@ -25,7 +25,7 @@ const statusText = (status) => {
 			str = "批准";
 			break;
 		case "Submmit":
-			str = "已送出";
+			str = "送出";
 			break;
 		default:
 			break;
@@ -33,16 +33,21 @@ const statusText = (status) => {
 	return str;
 };
 // 狀態下拉選單資料
-const statusOptions = ["取消", "已送出", "審核中", "駁回", "批准",];
+const statusOptions = ["取消", "送出", "審核中", "駁回", "批准",];
+
 export default function ExchangeReview() {
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(true);
 	const [searchValue, setSearchValue] = useState("");
 	const [userStatus, setUserStatus] = useState("");
 	const [datas, setDatas] = useState([]);
-	const [filteredDatas, setFilteredDatas] = useState([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [viewData, setViewData] = useState(null);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [totalPages, setTotalPages] = useState(1);
+	const [fromDate, setFromDate] = useState("");
+	const [toDate, setToDate] = useState("");
+	const [pageSize, setPageSize] = useState(10);
 	// 權限
 	const pathname = usePathname();
 	const { routes } = useAuthStore();
@@ -51,18 +56,32 @@ export default function ExchangeReview() {
 	const current = routes?.[pageKey];
 	const readMode = current === "readonly";
 	// 取得會員資料
-	const fetchData = async () => {
+	const fetchData = async (page = 1, isSearch = false) => {
 		try {
-			const response = await fetch("/api/rate/review");
-			const result = await response.json();
-			if (!response.ok) {
-				throw new Error(result.message || "Http 錯誤");
+			setIsLoading(true);
+
+			const params = new URLSearchParams({
+				pageIndex: page.toString(),
+				pageSize: pageSize.toString(),
+			});
+
+			if (isSearch) {
+				if (searchValue) params.append("keyword", searchValue);
+				if (userStatus) params.append("status", userStatus);
+				if (fromDate) params.append("from", fromDate);
+				if (toDate) params.append("to", toDate);
 			}
 
+			const response = await fetch(`/api/rate/review?${params.toString()}`);
+			const result = await response.json();
+			if (!response.ok) {
+				throw new Error(result.message || "HTTP 錯誤");
+			}
 			if (result.ResultCode === 0) {
 				console.log(result);
 				setDatas(result.ExcangeRateList);
-				setFilteredDatas(result.ExcangeRateList);
+				setTotalPages(result.TotalPage);
+				setCurrentPage(page);
 			} else {
 				throw new Error(result.message || "資料取得失敗");
 			}
@@ -72,35 +91,42 @@ export default function ExchangeReview() {
 			setIsLoading(false);
 		}
 	};
-	const handleOpenModal = (user) => {
+	const handleOpenModal = (item) => {
 		setIsModalOpen(true);
-		setViewData(user);
+		setViewData(item);
 	};
 	// 關閉Modal關閉Modal
-	const handleCloseModal = (user) => {
+	const handleCloseModal = () => {
 		setIsModalOpen(false);
 		setViewData(null);
 	};
+	// 換頁
+	const handlePageChange = (newPage) => {
+		if (newPage >= 1 && newPage <= totalPages) {
+			setCurrentPage(newPage);
+		}
+	};
+	const handlePageSizeChange = (newSize) => {
+		setPageSize(newSize);
+		setCurrentPage(1);
+	};
 	// 搜尋
 	const handleSearch = () => {
-		const keyword = searchValue.toLowerCase();
-		const results = users.filter(user => {
-			const matchKeyword = user.account.toLowerCase().includes(keyword);
-			const matchUserStatus = userStatus === "" || user.remark === userStatus;
-			return matchKeyword && matchActiveStatus && matchUserStatus;
-		});
-		setFilteredDatas(results);
+		setCurrentPage(1);
+		fetchData(1, true);
 	};
 	// 清空
 	const handleClear = () => {
 		setSearchValue("");
-		setActiveStatus("");
 		setUserStatus("");
+		setFromDate("");
+		setToDate("");
+		setCurrentPage(1);
 	};
 
 	useEffect(() => {
-		fetchData();
-	}, []);
+		fetchData(currentPage);
+	}, [pageSize, currentPage]);
 
 	if (isLoading) return <Loader fullScreen />;
 	return (
@@ -131,6 +157,22 @@ export default function ExchangeReview() {
 								options={statusOptions}
 							/>
 						</div>
+						<div className="flex flex-col gap-2 flex-1">
+							<p className="text-gray-900">日期區間</p>
+							<div className="flex items-center gap-2">
+								<Calender
+									className="flex-1"
+									value={fromDate}
+									onChange={(e) => setFromDate(e.target.value)}
+								/>
+								<span>～</span>
+								<Calender
+									className="flex-1"
+									value={toDate}
+									onChange={(e) => setToDate(e.target.value)}
+								/>
+							</div>
+						</div>
 					</div>
 					<div className="mt-5">
 						<CommonTable>
@@ -139,13 +181,14 @@ export default function ExchangeReview() {
 									<TheadTr>
 										<Th className="w-[10%]">編號</Th>
 										<Th className="w-[35%]">申請人</Th>
-										<Th className="w-[15%]">是否註記</Th>
+										<Th className="w-[15%]">審核狀態</Th>
 										<Th className="w-[30%]">申請時間</Th>
 										<Th className="w-[10%]">操作</Th>
 									</TheadTr>
 								</Thead>
 								<Tbody>
-									{filteredDatas.length > 0 ? filteredDatas.map((item, index) => {
+									{isLoading && <Loader page />}
+									{datas.length > 0 ? datas.map((item, index) => {
 										let status;
 										if (item.Status === "Cancel") {
 											status = "取消";
@@ -185,6 +228,23 @@ export default function ExchangeReview() {
 								</Tbody>
 							</Table>
 						</CommonTable>
+						<div className="mt-2">
+							<div className="w-20">
+								<Dropdown
+									placeholder={null}
+									value={pageSize}
+									onChange={handlePageSizeChange}
+									options={[10, 20, 30]}
+								/>
+							</div>
+						</div>
+						<div className="mt-2">
+							<Pagination
+								currentPage={currentPage}
+								totalPages={totalPages}
+								onPageChange={handlePageChange}
+							/>
+						</div>
 					</div>
 				</div>
 			</PageLayout>

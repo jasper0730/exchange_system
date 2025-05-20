@@ -26,7 +26,7 @@ export default function ExchangeMonitor() {
 			const result = await response.json();
 
 			if (!response.ok) {
-				throw new Error(response.message || "Http 錯誤");
+				throw new Error(response.message || "HTTP 錯誤");
 			}
 
 			if (result.ResultCode === 0) {

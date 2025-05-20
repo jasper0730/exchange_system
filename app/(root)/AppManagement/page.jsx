@@ -28,7 +28,7 @@ export default function AppManagement() {
 			const response = await fetch("/api/user");
 			const result = await response.json();
 			if (!response.ok) {
-				throw new Error(result.message || "Http 錯誤");
+				throw new Error(result.message || "HTTP 錯誤");
 			}
 
 			if (result.ResultCode === 0) {

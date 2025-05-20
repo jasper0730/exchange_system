@@ -105,7 +105,7 @@ export default function AdminManagement() {
 			const result = await response.json();
 
 			if (!response.ok || result.ResultCode !== 0) {
-				throw new Error(result.Message || "Http 錯誤");
+				throw new Error(result.Message || "HTTP 錯誤");
 			}
 
 			await fetchData();
